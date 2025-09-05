@@ -1,152 +1,189 @@
 <!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
 <script>
 (function () {
-  // --- This is the updated image capture function ---
-  async function captureShareImage() {
-    const target = document.querySelector('#capture-root') || document.body;
+  // --- Helpers from your original script ---
+  const isMobile = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820);
+  const getTargetDimensions = () => isMobile() ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
+  const wrapLines = (ctx, text, maxWidth) => {
+    const words = (text || '').trim().split(/\s+/), lines = [];
+    let line = '';
+    for (let i = 0; i < words.length; i++) {
+      const test = line ? `${line} ${words[i]}` : words[i];
+      if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = words[i]; } else { line = test; }
+    }
+    if (line) lines.push(line);
+    return lines;
+  };
+  const getFooterLines = () => {
+    const footer = document.querySelector('footer');
+    return footer ? Array.from(footer.querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean) : [];
+  };
 
-    // 1) Take a "screenshot" of the text and layout
-    const scale = Math.min(2, window.devicePixelRatio || 2);
-    const domCanvas = await window.html2canvas(target, {
-      backgroundColor: null, // Transparent background
-      scale
-    });
-    const W = domCanvas.width;
-    const H = domCanvas.height;
-
-    // 2) Create a new canvas to draw on
+  /**
+   * Main Image Generator
+   * This function now reads the live CSS variables to recreate the
+   * background image and duotone effect on the canvas before adding text.
+   */
+  async function generateShareImage() {
+    const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
-    canvas.width = W;
-    canvas.height = H;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
 
-    // 3) Read the page's CSS variables to get current colors and image
+    // --- 1. READ LIVE STYLES & RECREATE BACKGROUND ---
     const css = getComputedStyle(document.documentElement);
     const surface = (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
     const bgVar = css.getPropertyValue('--bg-image') || '';
-    let bgUrl = null;
-    const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
-    if (m && m[1]) bgUrl = m[1];
-
     const bgOpacity = parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
     const duoA = (css.getPropertyValue('--duo-a') || '#f784c5').trim();
     const duoB = (css.getPropertyValue('--duo-b') || '#1b602f').trim();
     const accent = (css.getPropertyValue('--accent') || '#000072').trim();
+    let bgUrl = null;
+    const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
+    if (m && m[1]) bgUrl = m[1];
 
-    // 4) Fill the canvas with the base theme color
+    // Fill with base color
     ctx.fillStyle = surface;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, width, height);
 
-    // Helper to make the background image grayscale
-    function grayify() {
-      const imgData = ctx.getImageData(0, 0, W, H);
-      const d = imgData.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const r = d[i], g = d[i + 1], b = d[i + 2];
-        const gy = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
-        d[i] = d[i + 1] = d[i + 2] = gy;
-      }
-      ctx.putImageData(imgData, 0, 0);
-    }
-
-    // 5) Draw the background image if it exists
+    // Draw background image (if any)
     if (bgUrl) {
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
-          const iw = img.naturalWidth, ih = img.naturalHeight;
-          const ir = iw / ih, cr = W / H;
-          let dw = W, dh = H;
-          if (ir > cr) { dh = H; dw = dh * ir; } else { dw = W; dh = dw / ir; }
-          const dx = (W - dw) / 2, dy = (H - dh) / 2;
-
+          // Scale image to 'cover' the canvas
+          const ir = img.naturalWidth / img.naturalHeight, cr = width / height;
+          let dw = width, dh = height;
+          if (ir > cr) { dh = height; dw = dh * ir; } else { dw = width; dh = dw / ir; }
+          const dx = (width - dw) / 2, dy = (height - dh) / 2;
           ctx.save();
           ctx.globalAlpha = bgOpacity;
           ctx.drawImage(img, dx, dy, dw, dh);
-          grayify(); // Apply grayscale filter
+          // Apply grayscale filter
+          const imgData = ctx.getImageData(0, 0, width, height);
+          const d = imgData.data;
+          for (let i = 0; i < d.length; i += 4) {
+            const gy = d[i] * 0.2126 + d[i + 1] * 0.7152 + d[i + 2] * 0.0722;
+            d[i] = d[i + 1] = d[i + 2] = gy;
+          }
+          ctx.putImageData(imgData, 0, 0);
           ctx.restore();
           resolve();
         };
         img.onerror = reject;
-        img.src = bgUrl;
+        img.src = new URL(bgUrl, window.location.href).href;
       });
     }
 
-    // 6) Recreate the duotone color overlay
-    (function addDuotone() {
-      ctx.globalCompositeOperation = 'multiply';
-      const radial = ctx.createRadialGradient(W * 0.2, H * 0.2, 0, W * 0.2, H * 0.2, Math.max(W, H) * 0.6);
-      radial.addColorStop(0, duoA + '66');
-      radial.addColorStop(1, '#0000');
-      ctx.fillStyle = radial;
-      ctx.fillRect(0, 0, W, H);
+    // Apply duotone overlay
+    ctx.globalCompositeOperation = 'multiply';
+    const radial = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, Math.max(width, height) * 0.6);
+    radial.addColorStop(0, `${duoA}66`); radial.addColorStop(1, '#0000');
+    ctx.fillStyle = radial; ctx.fillRect(0, 0, width, height);
+    const lin = ctx.createLinearGradient(0, 0, width, height);
+    lin.addColorStop(0, `${duoA}73`); lin.addColorStop(1, `${duoB}73`);
+    ctx.fillStyle = lin; ctx.fillRect(0, 0, width, height);
+    const top = ctx.createLinearGradient(0, 0, 0, height);
+    top.addColorStop(0, `${accent}1A`); top.addColorStop(1, '#0000');
+    ctx.fillStyle = top; ctx.fillRect(0, 0, width, height);
+    ctx.globalCompositeOperation = 'source-over'; // Reset blend mode
 
-      const lin = ctx.createLinearGradient(0, 0, W, H);
-      lin.addColorStop(0, duoA + '73');
-      lin.addColorStop(1, duoB + '73');
-      ctx.fillStyle = lin;
-      ctx.fillRect(0, 0, W, H);
+    // --- 2. DRAW TEXT OVER THE STYLED BACKGROUND ---
+    const questionText = (document.getElementById('question-display')?.innerText || '').trim();
+    const footerLines = getFooterLines();
+    const padding = Math.round(Math.min(width, height) * 0.05);
+    const maxTextWidth = Math.round(width * 0.82);
 
-      const top = ctx.createLinearGradient(0, 0, 0, H);
-      top.addColorStop(0, accent + '1A');
-      top.addColorStop(1, '#0000');
-      ctx.fillStyle = top;
-      ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = 'source-over';
-    })();
+    // Footer typography
+    const footerTextColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
+    ctx.fillStyle = footerTextColor;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.font = `${Math.round(width * 0.028)}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+    const footerLineHeight = Math.round(width * 0.036);
+    const footerBlockHeight = footerLines.length * footerLineHeight;
+    const footerBottomPad = Math.max(padding, Math.round(height * 0.04));
+    const footerTopY = height - footerBottomPad - footerBlockHeight;
+    footerLines.forEach((line, idx) => ctx.fillText(line, width / 2, footerTopY + (idx + 1) * footerLineHeight));
 
-    // 7) Place the text and layout on top
-    ctx.drawImage(domCanvas, 0, 0);
+    // Question typography
+    const questionTextColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
+    ctx.fillStyle = questionTextColor;
+    ctx.textBaseline = 'top';
+    let fontPx = Math.round(width * 0.072);
+    const setFont = px => { ctx.font = `bold ${px}px system-ui, -apple-system, Segoe UI, Roboto, Arial`; };
+    setFont(fontPx);
+    let lines = wrapLines(ctx, questionText, maxTextWidth);
+    const gapToFooter = footerLines.length ? Math.round(height * 0.07) : Math.round(height * 0.1);
+    const availableHeight = footerTopY - padding - gapToFooter;
+    let lineHeight = Math.round(fontPx * 1.25);
+    while ((lines.length * lineHeight) > availableHeight && fontPx > 20) {
+      fontPx -= 2; setFont(fontPx); lineHeight = Math.round(fontPx * 1.25);
+      lines = wrapLines(ctx, questionText, maxTextWidth);
+    }
+    const totalTextHeight = lines.length * lineHeight;
+    const startY = padding + Math.max(0, Math.floor(((footerTopY - gapToFooter - padding) - totalTextHeight) / 2));
+    lines.forEach((l, i) => ctx.fillText(l, width / 2, startY + i * lineHeight));
 
-    // 8) Prepare the final image for sharing or download
-    const blob = await new Promise((res) => canvas.toBlob(res, 'image/png', 1));
+    // --- 3. EXPORT IMAGE ---
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
     const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
     return { blob, file };
   }
 
-  // --- This is the updated share/download function ---
+  // --- Share/Download and Event Listeners ---
   async function doShareOrDownload() {
     try {
-      const { blob, file } = await captureShareImage(); // Use the new function
+      const { blob, file } = await generateShareImage(); // Use the updated function
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: 'Icebreaker' });
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = 'icebreaker.png';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href = url; a.download = 'icebreaker.png';
+        document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
-        alert('Image saved. Upload to Instagram Stories or TikTok.');
+        alert('Image saved. Upload to your story or feed.');
       }
-    } catch (e) {
-      console.error(e);
-      alert('Sharing failed. Please try again or save the image manually.');
-    }
+    } catch (e) { console.error(e); alert('Sharing failed.'); }
   }
 
-  // --- Wire up the buttons ---
   document.addEventListener('DOMContentLoaded', () => {
-    // Make sure to include the footer in the screenshot
-    const main = document.querySelector('main');
-    const footer = document.querySelector('footer');
-    if (main && footer && !document.getElementById('capture-root')) {
-      const wrapper = document.createElement('div');
-      wrapper.id = 'capture-root';
-      main.parentNode.insertBefore(wrapper, main);
-      wrapper.appendChild(main);
-      wrapper.appendChild(footer);
-    }
-
     const share = document.getElementById('post-link');
     if (share) {
-      const clone = share.cloneNode(true);
-      share.replaceWith(clone);
-      clone.addEventListener('click', (e) => { e.preventDefault(); doShareOrDownload(); });
+      share.addEventListener('click', (e) => { e.preventDefault(); doShareOrDownload(); });
     }
+  });
+})();
+
+(function() {
+  // --- This is the second script you provided, which sets the random background. It works with the above script. ---
+  const IMAGES = [ 'src/images/bg1.jpg', 'src/images/bg2.webp', 'src/images/bg3.webp', 'src/images/bg4.jpg', 'src/images/bg5.webp', 'src/images/bg6.webp', 'src/images/bg7.jpeg' ];
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+  function jitter(hex, j = 8) {
+    const h = hex.replace('#', '');
+    const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    const n = parseInt(full, 16);
+    let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    function rand(v) { return clamp(v + Math.round((Math.random() * 2 - 1) * j), 0, 255); }
+    r = rand(r); g = rand(g); b = rand(b);
+    const hh = (x) => x.toString(16).padStart(2, '0');
+    return `#${hh(r)}${hh(g)}${hh(b)}`;
+  }
+  function applyRandomBackground() {
+    if (!IMAGES.length) return;
+    document.documentElement.style.setProperty('--bg-image', `url("${pick(IMAGES)}")`);
+    document.documentElement.style.setProperty('--duo-a', jitter('#f784c5', 10));
+    document.documentElement.style.setProperty('--duo-b', jitter('#1b602f', 10));
+    document.documentElement.style.setProperty('--accent', jitter('#000072', 6));
+  }
+  document.addEventListener('DOMContentLoaded', applyRandomBackground);
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('change-theme-button');
+    if (btn) btn.addEventListener('click', applyRandomBackground);
   });
 })();
 </script>
