@@ -23,7 +23,7 @@ function getComputedBgColor(el) {
 async function captureShareImage() {
   const target = document.querySelector('#capture-root') || document.body;
 
-  // 1) Raster the DOM with a transparent background (so we can composite behind it)
+  // 1) Raster the DOM with a transparent background
   const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
   const domCanvas = await window.html2canvas(target, {
     backgroundColor: null,
@@ -38,34 +38,23 @@ async function captureShareImage() {
   canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // 3) Read the SAME CSS variables your page uses (source of truth)
+  // 3) Read the SAME CSS variables your page uses
   const css = getComputedStyle(document.documentElement);
-
-  // Theme surface (fall back to dark)
-  const surface =
-    (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
-
-  // Background image URL (from --bg-image), robust URL extractor
+  const surface = (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
   const bgVar = css.getPropertyValue('--bg-image') || '';
   let bgUrl = null;
-  {
-    // handles url("…"), url('…'), url(…)
-    const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
-    if (m && m[1]) bgUrl = m[1];
-  }
-  const bgOpacity =
-    parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
+  const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
+  if (m && m[1]) bgUrl = m[1];
 
-  // Duotone + accent
+  const bgOpacity = parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
   const duoA = (css.getPropertyValue('--duo-a') || '#f784c5').trim();
   const duoB = (css.getPropertyValue('--duo-b') || '#1b602f').trim();
   const accent = (css.getPropertyValue('--accent') || '#000072').trim();
 
-  // 4) Base fill with the theme surface so text contrast matches the page
+  // 4) Base fill with the theme surface
   ctx.fillStyle = surface;
   ctx.fillRect(0, 0, W, H);
 
-  // Helper: grayscale pass (match your CSS grayscale)
   function grayify() {
     const imgData = ctx.getImageData(0, 0, W, H);
     const d = imgData.data;
@@ -77,14 +66,12 @@ async function captureShareImage() {
     ctx.putImageData(imgData, 0, 0);
   }
 
-  // 5) Draw the same background image (cover) @ ~20% and then grayscale
+  // 5) Draw the background image
   if (bgUrl) {
     await new Promise((resolve, reject) => {
       const img = new Image();
-      // keep this even if same-origin; prevents a tainted canvas if you move to a CDN later
       img.crossOrigin = 'anonymous';
       img.onload = () => {
-        // cover sizing
         const iw = img.naturalWidth, ih = img.naturalHeight;
         const ir = iw / ih, cr = W / H;
         let dw = W, dh = H;
@@ -92,9 +79,9 @@ async function captureShareImage() {
         const dx = (W - dw) / 2, dy = (H - dh) / 2;
 
         ctx.save();
-        ctx.globalAlpha = bgOpacity; // ~0.2
+        ctx.globalAlpha = bgOpacity;
         ctx.drawImage(img, dx, dy, dw, dh);
-        grayify();                   // mimic CSS filter: grayscale(100%)
+        grayify();
         ctx.restore();
 
         resolve();
@@ -104,29 +91,23 @@ async function captureShareImage() {
     });
   }
 
-  // 6) Rebuild the duotone + accent overlay (like body::after)
+  // 6) Rebuild the duotone + accent overlay
   (function addDuotone() {
-    // radial glow
-    const radial = ctx.createRadialGradient(
-      W * 0.2, H * 0.2, 0,
-      W * 0.2, H * 0.2, Math.max(W, H) * 0.6
-    );
-    radial.addColorStop(0, duoA + '66'); // ~40%
-    radial.addColorStop(1, '#0000');
     ctx.globalCompositeOperation = 'multiply';
+    const radial = ctx.createRadialGradient(W * 0.2, H * 0.2, 0, W * 0.2, H * 0.2, Math.max(W, H) * 0.6);
+    radial.addColorStop(0, duoA + '66');
+    radial.addColorStop(1, '#0000');
     ctx.fillStyle = radial;
     ctx.fillRect(0, 0, W, H);
 
-    // diagonal sweep
     const lin = ctx.createLinearGradient(0, 0, W, H);
-    lin.addColorStop(0, duoA + '73');    // ~45%
+    lin.addColorStop(0, duoA + '73');
     lin.addColorStop(1, duoB + '73');
     ctx.fillStyle = lin;
     ctx.fillRect(0, 0, W, H);
 
-    // top accent
     const top = ctx.createLinearGradient(0, 0, 0, H);
-    top.addColorStop(0, accent + '1A');  // ~10%
+    top.addColorStop(0, accent + '1A');
     top.addColorStop(1, '#0000');
     ctx.fillStyle = top;
     ctx.fillRect(0, 0, W, H);
@@ -134,10 +115,10 @@ async function captureShareImage() {
     ctx.globalCompositeOperation = 'source-over';
   })();
 
-  // 7) Put the DOM snapshot on top (what users actually see)
+  // 7) Put the DOM snapshot on top
   ctx.drawImage(domCanvas, 0, 0);
 
-  // 8) Return as Blob/File (your share/copy/download can keep using this)
+  // 8) Return as Blob/File
   const blob = await new Promise((res) => canvas.toBlob(res, 'image/png', 1));
   const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
   return { blob, file };
