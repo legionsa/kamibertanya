@@ -286,3 +286,292 @@
     * Siapa yang membuat rakyat pasrah?
     * Mengapa keadilan hanya di teori?
     * Apakah rakyat hanya komoditas?
+    * Apa gunanya DPR bila tak dipercaya?
+    * Mengapa janji reformasi selalu kadaluarsa?
+    * Kapan publik melihat hasil, bukan spanduk?
+    * Siapa yang mengawasi para pengawas?
+    * Untuk siapa APBN sesungguhnya bekerja?
+    * Di mana empati saat harga meroket?
+    * Sampai kapan darurat dianggap normal?
+    * Berapa harga sebuah permintaan maaf negara?
+    * Mengapa keadilan makin mahal bagi miskin?
+    * Apa arti kedaulatan tanpa keterbukaan?
+    * Siapa diuntungkan dari kekacauan yang tertata?
+    * Kapan partai berani bersih dari dinasti?
+    * Mengapa kritik disamakan dengan ancaman?
+    * Di mana letak nurani dalam rapat paripurna?
+    * Apa guna UU bila tebang pilih?
+    * Mengapa KKN selalu menemukan jalan?
+    * Kapan polisi menjadi pelindung, bukan pelaku?
+    * Apa jadinya jika 17+8 diabaikan?
+    * Siapa takut transparansi real-time anggaran?
+    * Mengapa data publik diperlakukan seperti rahasia?
+    * Kapan revisi undang-undang berpihak pada rakyat?
+    * Untuk apa kursi empuk bila legitimasi tipis?
+    * Siapa bertanggung jawab atas nyawa di jalan?
+    * Mengapa korban selalu diminta memahami negara?
+    * Kapan elit belajar mendengar tanpa mikrofon?
+    * Di mana akal sehat saat fasilitas meluber?
+    * Kenapa subsidi sosial kalah dari fasilitas politik?
+    * Apa indikator kemajuan selain angka PR?
+    * Sampai kapan aparat kebal dari kamera?
+    * Mengapa whistleblower lebih takut dari koruptor?
+    * Siapa yang menghitung biaya ketidakadilan?
+    * Kapan pajak dipakai setransparan janji?
+    * Apa bedanya negara hukum dan negara pasal?
+    * Mengapa konflik kepentingan dianggap budaya?
+    * Kapan audit DPR dibuka tanpa sensor?
+    * Siapa yang takut pada pemilu yang jujur biaya?
+    * Mengapa politik biaya tinggi dibiarkan?
+    * Kapan tender publik bebas titipan?
+    * Apa kabar UU Perampasan Aset?
+    * Mengapa KPK dibonsai, bukan diperkuat?
+    * Kapan TNI kembali sepenuhnya ke barak?
+    * Siapa yang melindungi pembela HAM?
+    * Mengapa media takut pada telepon tengah malam?
+    * Kapan revisi UU ITE berpihak pada warganet?
+    * Apa salahnya oposisi yang sehat?
+    * Mengapa kritik dituduh makar sebelum berpikir?
+    * Kapan MK dan MA pulih dari intervensi?
+    * Untuk siapa ibu kota baru dibangun?
+    * Siapa menanggung utang kebijakan hari ini?
+    * Mengapa desa masih menunggu janji dana?
+    * Kapan ketimpangan jadi musuh bersama?
+    * Apa gunanya pertumbuhan tanpa pemerataan?
+    * Mengapa alam dibarter dengan izin?
+    * Kapan tambang patuh pada hak warga?
+    * Siapa yang mengurus korban limbah industri?
+    * Mengapa agraria selalu jadi konflik lama?
+    * Kapan tanah adat diakui sepenuhnya?
+    * Apa jaminan pekerja di era otomasi?
+    * Mengapa upah minimum kalah dari inflasi?
+    * Kapan jaminan sosial bebas birokrasi?
+    * Siapa yang mengaudit bansos dan basis datanya?
+    * Mengapa stunting tak dianggap darurat nasional?
+    * Kapan sekolah mengajar nalar, bukan hafalan?
+    * Apa kabar riset yang dijanjikan?
+    * Mengapa inovasi kalah oleh izin rumit?
+    * Kapan harga pangan stabil di dapur rakyat?
+    * Siapa yang menahan reformasi pajak yang adil?
+    * Mengapa tax holiday lebih cepat dari layanan publik?
+    * Kapan dana kesehatan tak bocor?
+    * Apa makna reformasi bila sejarah ditulis ulang?
+    * Mengapa rekonsiliasi tanpa kebenaran dipaksa?
+    * Kapan korban pelanggaran HAM mendapat kepastian?
+    * Siapa mengawal polisi dari politik?
+    * Mengapa kepala daerah takut transparansi kontrak?
+    * Kapan keterbukaan data jadi default?
+    * Apa risiko negara big data tanpa privasi?
+    * Mengapa penyadapan tanpa pengawasan dibiarkan?
+    * Kapan parlemen mempublikasi konflik kepentingan?
+    * Untuk siapa UU dibuat: rakyat atau sponsor?
+    * Siapa yang menilai kinerja wakil rakyat sebenarnya?
+    * Mengapa absensi sidang bukan aib politik?
+    * Kapan janji kampanye dihitung seperti kontrak?
+    * Apa gunanya reses tanpa mendengar?
+    * Mengapa petani masih kalah dari impor mendadak?
+    * Kapan nelayan punya bahan bakar terjangkau?
+    * Apa dampak hilirisasi tanpa lingkungan?
+    * Mengapa izin sawit di kawasan lindung lolos?
+    * Kapan reklamasi diputuskan dengan sains, bukan lobi?
+    * Siapa menjaga hutan dari kompromi anggaran?
+    * Mengapa aparat cepat menangkap pembuat poster?
+    * Kapan aparat cepat memulihkan korban kekerasan?
+    * Apa bedanya stabilitas dan pembungkaman?
+    * Mengapa ormas jadi alat politik anggaran?
+    * Kapan perempuan duduk di meja keputusan, bukan dekorasi?
+    * Apa rencana negara untuk pekerja informal?
+    * Mengapa UMKM kalah dalam pengadaan publik?
+    * Kapan monopoli diputus, pasar dibuka adil?
+    * Apa yang menahan desentralisasi fiskal nyata?
+    * Mengapa dana daerah dipangkas lalu disalahkan?
+    * Kapan transport publik menjadi hak, bukan wacana?
+    * Apa prioritas: gedung megah atau gizi anak?
+    * Mengapa APBN lebih ramah pada alat perang?
+    * Kapan audit pertahanan dibuka tanpa tabu?
+    * Apa metrik kemakmuran selain PDB?
+    * Mengapa Gini Rasio tak jadi alarm politik?
+    * Kapan indikator kesejahteraan jadi kompas kebijakan?
+    * Apa gunanya smart city tanpa air bersih?
+    * Mengapa kota memusuhi pejalan kaki?
+    * Kapan rumah layak jadi standar, bukan mimpi?
+    * Apa kompromi di balik proyek cepat?
+    * Mengapa kontrak jangka panjang diputuskan singkat?
+    * Kapan BUMN fokus layanan, bukan panggung politik?
+    * Apa alasan tarif publik naik diam-diam?
+    * Mengapa bailout selalu untuk yang besar?
+    * Kapan kartel pangan dibongkar sungguh-sungguh?
+    * Apa sanksi untuk penimbun anggaran?
+    * Mengapa audit BPK jarang berujung jeruji?
+    * Kapan integritas jadi tiket karier politik?
+    * Apa arti sumpah jabatan tanpa sanksi moral?
+    * Mengapa konflik kepentingan tak didefinisikan jelas?
+    * Apa gunanya ambang parlemen bagi pemilih?
+    * Mengapa suara minoritas selalu dikorbankan?
+    * Kapan kursi perempuan 30% jadi kualitas, bukan angka?
+    * Apa peran pemuda selain konten?
+    * Mengapa kampus takut pada debat kebijakan?
+    * Kapan riset publik membongkar kebijakan buruk?
+    * Apa yang menahan reformasi birokrasi digital?
+    * Mengapa layanan publik jam 9–4 di era 24/7?
+    * Kapan antrian online berhenti jadi lotre?
+    * Apa yang rakyat dapat dari pajak digital?
+    * Mengapa platform dibiarkan monopoli data warga?
+    * Kapan hak privasi dijamin setegas hak milik?
+    * Apa artinya netralitas ASN di lapangan?
+    * Mengapa mutasi jabatan jadi alat balas budi?
+    * Kapan seleksi pejabat benar-benar terbuka?
+    * Apa kabar meritokrasi di birokrasi?
+    * Mengapa perencana tak turun ke kampung?
+    * Kapan data kemiskinan akurat sampai RT?
+    * Apa gunanya musrenbang jika usulan menguap?
+    * Mengapa kebijakan diluncurkan sebelum uji dampak?
+    * Kapan pemerintah belajar mencabut kebijakan buruk cepat?
+    * Apa rencana pasca-utang proyek prestisius?
+    * Mengapa bunga utang didiamkan publik?
+    * Kapan audit keberlanjutan jadi wajib proyek negara?
+    * Apa jadinya jika 17+8 dijalankan penuh?
+    * Mengapa tuntutan jangka pendek sulit, jangka panjang kabur?
+    * Kapan roadmap reformasi dipublikasikan mingguan?
+    * Apa mekanisme rakyat memantau progres 17+8?
+    * Mengapa parlemen alergi KPI obyektif?
+    * Kapan sidang disiarkan dengan data, bukan drama?
+    * Apa konsekuensi pribadi bagi pelanggar etik?
+    * Mengapa polisi internal mengadili polisi internal?
+    * Kapan ombudsman diberi gigi yang tajam?
+    * Apa skenario keluar jika krisis memburuk?
+    * Mengapa rencana cadangan disembunyikan?
+    * Kapan kebijakan diuji publik sebelum berlaku?
+    * Apa salahnya referendum lokal untuk isu besar?
+    * Mengapa aspirasi daerah tertukar oleh buzzer?
+    * Kapan literasi politik diajarkan sejak sekolah?
+    * Apa guna etik digital tanpa teladan pejabat?
+    * Mengapa hoaks subur di vakum transparansi?
+    * Kapan arsip negara dibuka untuk akademisi?
+    * Apa tanda negara dewasa menghadapi kritik?
+    * Mengapa budaya malu hilang dari elite?
+    * Kapan pejabat berhenti memaki rakyat?
+    * Apa ukuran sukses: tepuk tangan atau dampak?
+    * Mengapa protokol mengalahkan akal sehat?
+    * Kapan darurat jadi alasan terakhir, bukan pertama?
+    * Apa pelajaran dari krisis yang diulang?
+    * Mengapa evaluasi pascakrisis tak dipublikasikan?
+    * Kapan standar polisi mirip standar profesional lain?
+    * Apa batas wajar kekuatan negara atas warga?
+    * Mengapa sidang etik berlangsung tertutup?
+    * Kapan sanksi pidana mengikuti pelanggaran anggaran?
+    * Apa guna dewan etik tanpa taring?
+    * Mengapa aparatur takut menolak perintah salah?
+    * Kapan pelapor dilindungi, bukan dikorbankan?
+    * Apa manfaat e-procurement bila celah tetap?
+    * Mengapa konsultasi publik cuma formalitas?
+    * Kapan biaya kampanye dilaporkan harian?
+    * Apa batas wajar iklan pemerintah?
+    * Mengapa program gizi kalah pamor proyek mercusuar?
+    * Kapan indikator lingkungan mengunci izin industri?
+    * Apa nilai hutan dibanding kilang sesaat?
+    * Mengapa transport desa tertinggal dari bandara baru?
+    * Kapan nelayan jadi prioritas, bukan poster?
+    * Apa rencana energi murah yang adil?
+    * Mengapa transisi energi tanpa transisi pekerja?
+    * Kapan PLTU tua pensiun dengan adil?
+    * Apa jaminan listrik tak jadi pajak tersembunyi?
+    * Mengapa tarif air ditetapkan tanpa rapat warga?
+    * Kapan tata ruang melindungi kampung dari banjir?
+    * Apa perlindungan penghuni rusun yang digusur?
+    * Mengapa gentrifikasi dibiarkan mengusir yang lemah?
+    * Kapan perumahan sosial dikerjakan, bukan dicontohkan?
+    * Apa ukuran keberhasilan IKN selain foto?
+    * Mengapa proyek strategis kurang strategi keluar?
+    * Kapan logistik pangan lebih gesit dari spekulan?
+    * Apa rencana cadangan saat El Niño/La Niña?
+    * Mengapa data cuaca tak terintegrasi kebijakan?
+    * Kapan desa jadi pusat inovasi, bukan objek?
+    * Apa kabar koperasi selain seremoni?
+    * Mengapa BUMDes terkunci aturan rumit?
+    * Kapan kredit mikro bebas rente gelap?
+    * Apa salahnya membatasi rangkap jabatan?
+    * Mengapa gratifikasi masih dianggap hadiah?
+    * Kapan pelatihan antikorupsi menyentuh perilaku, bukan slide?
+    * Apa efek psikologi kekuasaan yang diakui?
+    * Mengapa pejabat enggan hidup sederhana?
+    * Kapan gaya hidup jadi isu etik nyata?
+    * Apa yang rakyat dapat dari diplomasi mahal?
+    * Mengapa utusan khusus tumbuh tanpa ukuran kinerja?
+    * Kapan perjanjian internasional dipublikasikan lengkap?
+    * Apa prinsip luar negeri selain foto bersama?
+    * Mengapa diaspora jarang diajak merancang kebijakan?
+    * Kapan perlindungan WNI di luar negeri maksimal?
+    * Apa arti kemandirian pangan di pelabuhan impor?
+    * Mengapa lahan subur kalah oleh properti?
+    * Kapan reforma agraria lebih dari peta?
+    * Apa rencana air baku untuk 30 tahun?
+    * Mengapa sanitasi kalah seksi dari tol?
+    * Kapan kota tanpa kumuh jadi target nyata?
+    * Apa strategi hadapi AI tanpa korban pekerja?
+    * Mengapa data pendidikan tak sinkron dengan industri?
+    * Kapan kurikulum jujur pada masa depan?
+    * Apa prioritas: talenta atau proyek?
+    * Mengapa beasiswa tersandera birokrasi?
+    * Kapan jabatan akademik bebas politik?
+    * Apa pelajaran dari sukses tetangga yang realistis?
+    * Mengapa belajar dari gagal sendiri sulit?
+    * Kapan indikator pelayanan diterbitkan per kantor?
+    * Apa standar antre maksimal layanan publik?
+    * Mengapa hakim tak diwajibkan lapor harta bulanan?
+    * Kapan mafia peradilan jadi sejarah?
+    * Apa gunanya jaksa agung independen tanpa budget independen?
+    * Mengapa denda korporasi lebih murah dari pelanggaran?
+    * Kapan pidana ekologis dirasakan direksi, bukan satpam?
+    * Apa rencana negara hadapi penuaan penduduk?
+    * Mengapa disabilitas masih jadi catatan kaki?
+    * Kapan kota benar-benar inklusif, bukan mural?
+    * Apa alasan kriminalisasi warga merekam aparat?
+    * Mengapa SOP aparat kalah oleh emosi?
+    * Kapan pelatihan de-eskalasi jadi kewajiban?
+    * Apa jaminan demonstrasi aman dari provokasi?
+    * Mengapa garis komando tak jelas saat krisis?
+    * Kapan rapat koordinasi melahirkan keputusan, bukan sorotan?
+    * Apa arti satu data jika ada seribu portal?
+    * Mengapa interoperabilitas selalu jadi alasan nanti?
+    * Kapan open API layanan publik dibuka?
+    * Apa gunanya dashboard jika datanya basi?
+    * Mengapa indikator 17+8 tak dibuat publik?
+    * Kapan ritme progres 17+8 diumumkan mingguan?
+    * Apa sanksi jika tenggat 17+8 dilewatkan?
+    * Mengapa pemerintah takut diaudit warga?
+    * Kapan parlemen membuat rapor kinerja terbuka?
+    * Apa peran tokoh agama menekan KKN nyata?
+    * Mengapa civil society sering dipinggirkan?
+    * Kapan negosiasi penguasa–rakyat dilakukan jujur?
+    * Apa skema ganti rugi yang manusiawi?
+    * Mengapa aparat sukar mengakui salah?
+    * Kapan konferensi pers diisi data, bukan narasi?
+    * Apa tanda negara berani berubah?
+    * Mengapa pemimpin takut kehilangan muka?
+    * Kapan keberpihakan ke yang lemah jadi kebijakan?
+    * Apa jadinya jika anak muda mem-veto proyek buruk?
+    * Mengapa pemilih hanya dipandang saat kampanye?
+    * Kapan dialog dua arah jadi budaya?
+    * Apa prioritas kabinet: reputasi atau reformasi?
+    * Mengapa target jangka pendek mengalahkan visi?
+    * Kapan publik menilai pejabat layaknya CEO?
+    * Apa alasan menunda keputusan benar yang pahit?
+    * Mengapa kita toleran pada mediokritas?
+    * Kapan merit mengalahkan loyalitas?
+    * Apa batas sehat kompromi politik?
+    * Mengapa kabinet gemuk dianggap solusi?
+    * Kapan indikator konflik kepentingan dipasang di tiap kantor?
+    * Apa peran sains kebijakan selain pembenaran?
+    * Mengapa RIA jarang diterapkan sungguh-sungguh?
+    * Kapan kebijakan diuji A/B seperti layanan digital?
+    * Apa salahnya uji coba kecil sebelum skala nasional?
+    * Mengapa keputusan besar diumumkan saat rakyat tidur?
+    * Kapan konsultasi lintas partai terjadi di depan publik?
+    * Apa yang mencegah veto oligarki?
+    * Mengapa kepatuhan pajak rendah dibiarkan?
+    * Kapan negara menukar rasa takut dengan rasa percaya?
+    * Apa arti keadilan transisional yang berani?
+    * Mengapa luka lama dibiarkan bernanah?
+    * Kapan politik mengutamakan martabat manusia?
+    * Apa wajah masa depan Indonesia yang adil?
