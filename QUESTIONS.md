@@ -1,263 +1,290 @@
 # Questions
 
 * Credit:[KLVN](https://www.linkedin.com/in/hikalvin/)
-    * Makanan favorit lo apa?
-    * Lo tim kopi atau tim teh?
-    * Lo lebih suka begadang atau bangun pagi?
-    * Kalo bisa punya superpower, maunya apa?
-    * Film guilty pleasure lo apa?
-    * Lo tim kucing atau tim anjing?
-    * Musim apa yang paling lo suka?
-    * Makanan paling aneh yang pernah lo coba?
-    * Kalo tiba-tiba dapet jackpot, lo beli apa duluan?
-    * Mending selalu telat 10 menit atau kepagian 20 menit?
-    * Tempat liburan impian lo dimana?
-    * Lo lebih suka liburan ke pantai atau gunung?
-    * Trip terbaik lo seumur hidup?
-    * Negara mana yang pengen banget lo tinggal setahun?
-    * Roadtrip atau naik pesawat?
-    * Flight terlama yang pernah lo jalanin?
-    * Pernah solo traveling nggak?
-    * Kota apa yang paling bikin lo kaget (entah bagus atau jelek)?
-    * Landmark keren apa yang pernah lo datengin?
-    * Pernah ngalamin kejadian kocak pas traveling?
-    * Kerjaan pertama lo dulu apa?
-    * Hal paling lo suka dari kerjaan sekarang?
-    * Mentor/atasan terbaik yang pernah lo punya siapa?
-    * Apa sih yang bikin lo semangat kerja?
-    * Kalo bisa tuker kerjaan sehari, pengen jadi apa?
-    * Lebih prefer WFH atau ngantor?
-    * Project paling susah yang pernah lo kerjain apa?
-    * Skill apa yang pengen lo pelajarin buat karier?
-    * Nasihat kerja paling mantep yang pernah lo dapet?
-    * Dream job lo apa?
-    * Film favorit sepanjang masa?
-    * Series terakhir yang lo binge?
-    * Buku favorit lo?
-    * Kalo bisa main film, pengen main di film apa?
-    * Band/penyanyi favorit lo siapa?
-    * Bisa main alat musik nggak?
-    * Game favorit lo apa?
-    * Lebih suka dengerin podcast atau musik pas kerja?
-    * Hobi apa yang pengen lo tekunin tapi belum sempet?
-    * Kartun masa kecil favorit lo?
-    * Topping pizza favorit?
-    * Lo tim manis atau asin?
-    * Camilan favorit pas kerja?
-    * Restoran favorit lo dimana?
-    * Kalo cuma boleh makan satu jenis makanan seumur hidup, pilih apa?
-    * Lo suka makanan pedes atau yang biasa aja?
-    * Dessert favorit?
-    * Lebih suka masak atau baking?
-    * Makanan yang nggak mungkin bisa lo tinggalin?
-    * Kombinasi makanan aneh yang lo suka?
-    * Lo lebih suka tinggal di kota rame atau kampung tenang?
-    * Lo lebih ke introvert atau extrovert?
-    * Bahasa cinta (love language) lo apa?
-    * Lo ada koleksi barang unik nggak?
-    * Hari libur favorit lo?
-    * Cara favorit lo buat healing/relax?
-    * Lo suka bangun pagi apa begadang?
-    * Bikin resolusi tahun baru nggak biasanya?
-    * Lebih suka pagi atau malem?
-    * App yang paling sering lo buka apa?
-    * Mending bisa terbang atau bisa ngilang?
-    * Mending hidup tanpa internet atau tanpa AC?
-    * Mending bisa ngomong sama hewan atau bisa semua bahasa?
-    * Mending nggak usah email lagi atau nggak pake sosmed lagi?
-    * Mending hidup 100 tahun lalu atau 100 tahun depan?
-    * Mending tiap ngomong harus nyanyi atau tiap jalan harus joget?
-    * Mending kerja 4 hari x 10 jam atau 5 hari x 8 jam?
-    * Mending nggak makan coklat lagi atau nggak makan pizza lagi?
-    * Mending jadi orang kaya atau orang terkenal?
-    * Mending punya tombol rewind atau pause buat hidup?
-    * Mainan favorit lo waktu kecil apa?
-    * Dulu cita-cita lo pengen jadi apa?
-    * Pelajaran sekolah yang paling lo suka?
-    * Dulu main olahraga apa di sekolah?
-    * Kartun favorit masa kecil?
-    * Mainan playground yang paling lo suka?
-    * Punya nama panggilan kecil nggak?
-    * Konser pertama yang lo tonton apa?
-    * Lebih suka libur sekolah musim panas atau musim hujan?
-    * Permen/cemilan favorit waktu kecil?
-    * Hal paling lo suka dari kerja tim apa?
-    * Menurut lo apa sih kunci tim yang sukses?
-    * Cara lo ngerayain pencapaian bareng tim?
-    * Project tim terbaik yang pernah lo ikutin?
-    * Lo lebih suka brainstorming rame-rame atau mikir sendiri dulu?
-    * Gimana cara lo nunjukin apresiasi ke temen kerja?
-    * Apa yang bikin lo tetep semangat pas project lagi berat?
-    * Karakter apa yang lo paling hargain dari tim?
-    * Kalo ada konflik, biasanya lo handle gimana?
-    * Cara favorit lo dapet feedback gimana?
-    * 5 tahun lagi lo pengen jadi apa?
-    * Apa bucket list yang pengen lo capai dalam waktu dekat?
-    * Kalo bisa langsung jago 1 skill, mau skill apa?
-    * Pengen lebih pilih nulis buku atau buka bisnis?
-    * Target besar apa yang lagi lo kejar?
-    * Menurut lo definisi sukses itu apa?
-    * Kalo balik kuliah, jurusan apa yang mau lo ambil?
-    * Lo kepikiran tinggal di luar negeri nggak?
-    * Lo lebih ngerasa cocok jadi leader atau spesialis?
-    * Legacy/jejak apa yang pengen lo tinggalin?
-    * iPhone atau Android?
-    * Mac atau Windows?
-    * Netflix atau YouTube?
-    * IG atau TikTok?
-    * Sneakers atau sendal jepit?
-    * Telpon atau chat aja?
-    * Coklat atau vanila?
-    * Film komedi atau drama?
-    * Cuaca panas atau dingin?
-    * Sarapan atau makan malam?
-    * Kalo bisa bikin penemuan baru, pengen bikin apa?
-    * Kalo bisa jadi hewan, mau jadi apa?
-    * Kalo hidup lo film, genrenya apa?
-    * Kalo punya mesin waktu, lo mau ke masa kapan dulu?
-    * Pengen tuker hidup sama siapa sehari aja?
-    * Nama superhero versi lo apa?
-    * Lagu apa yang cocok jadi theme song lo?
-    * Kalo bisa bikin hari libur baru, mau ngerayain apa?
-    * Mau tinggal di dunia novel/film mana?
-    * Kalo bisa bikin wahana seru di Dufan, bentuknya kayak gimana?
-    * Lebih susah kolaborasi sama developer perfeksionis atau PM yang super detail?
-    * Mending brainstorming ide bareng tim rame-rame atau fokus sendiri dulu baru share?
-    * Lebih penting buat lo dapet feedback cepat dari user atau dari sesama desainer?
-    * Kalau ada konflik desain, lo lebih pilih diskusi panjang sampai sepakat atau voting cepet?
-    * Mending kerja bareng tim kecil yang kompak atau tim gede yang resource lengkap?
-    * Lebih nyaman presentasi desain ke stakeholder langsung atau via prototipe interaktif?
-    * Lo lebih suka dapet kritik jujur tapi pedas atau pujian manis tapi kurang membangun?
-    * Mending dapet revisi mendadak di tengah sprint atau feedback telat setelah launch?
-    * Lebih seru design sprint intens 5 hari atau iterasi panjang tapi santai?
-    * Lo lebih pilih jadi problem solver di tim atau jadi orang yang jago nge-visual-in ide?
-    * Lo lebih pilih nongkrong di warteg atau di kafe hits Jaksel?
-    * Lo lebih rela kejebak macet Sudirman atau desek-desekan di KRL?
-    * Lebih nyaman naik TransJakarta atau ojol pas hujan deres?
-    * Mending sarapan bubur ayam diaduk atau nggak diaduk?
-    * Lebih ikonik ketoprak Benhil atau gado-gado Cikini?
-    * Lo lebih pilih nongkrong SCBD after hours atau CFD Sudirman?
-    * Mending jajan boba di mall atau es teh manis di warkop?
-    * Lebih worth it makan soto Betawi Manggarai atau nasi uduk Kebon Kacang?
-    * Mending buka laptop di coffee shop Senopati atau di coworking space Kuningan?
-    * Lebih rame nongkrong di Blok M Square atau di Kemang?
-    * Lo lebih pilih ngaso di GBK sore-sore atau main ke Ancol malem-malem?
-    * Mending makan sate Taichan Senayan atau sate Padang Ajo Ramon?
-    * Lebih sering lo nyasar di ITC Kuningan atau ITC Mangga Dua?
-    * Mending belanja baju di Tanah Abang atau di mall elite?
-    * Lebih asik jajan kerak telor di Monas atau otak-otak di Ancol?
-    * Mending nongkrong rooftop SCBD atau lesehan angkringan Blok M?
-    * Lo lebih pilih commute naik KRL dari Bekasi atau naik motor lawan panas Cawang?
-    * Mending nonton konser di JIExpo Kemayoran atau di Senayan?
-    * Lebih afdol bukber di restoran all you can eat atau di warteg langganan?
-    * Mending foto ala-ala di Kota Tua atau di M Bloc?
-    * Lebih worth it jajan cilok depan kampus atau sushi mall premium?
-    * Mending weekend ke PIK 2 atau ke Ragunan?
-    * Lebih lo suka ngemil martabak manis tipis kering atau martabak tebal isi banyak?
-    * Mending ngopi di Filosofi Kopi Blok M atau kopi sachet Alfamart depan kosan?
-    * Lebih seru nongkrong sampai pagi di Kemang atau karaoke di Kuningan?
-    * Lo lebih pilih macet di Gatot Subroto atau stuck di flyover Kuningan?
-    * Mending nyobain nasi goreng Kambing Kebon Sirih atau sate Maranggi Cibubur?
-    * Lebih nostalgia main ke Dufan atau belanja di Glodok?
-    * Mending makan seafood Muara Karang atau pecel lele Kalimalang?
-    * Lebih cepet ojol Grab atau Gojek pas jam pulang kantor?
-    * Lo lebih pilih nongkrong di PIK malam minggu atau nongkrong di Kemang?
-    * Mending makan siang di warteg atau fast food mall?
-    * Lebih nyaman kerja di coworking space Kuningan atau di coffee shop Senopati?
-    * Lo lebih pilih ngemil kerak telor Monas atau ketoprak Cikini?
-    * Mending belanja hemat di Tanah Abang atau gaya di Grand Indonesia?
-    * Lebih rame CFD Sudirman atau ngabuburit di GBK?
-    * Lo lebih pilih es kopi susu kekinian atau teh botol dingin warung?
-    * Mending makan seafood Muara Angke atau bakmi GM?
-    * Lebih chill nongkrong rooftop SCBD atau lesehan di Blok M?
-    * Lo lebih pilih macet di Semanggi atau stuck di Pancoran?
-    * Mending bukber di restoran all you can eat atau warteg langganan?
-    * Lebih seru karaoke di Kuningan atau live music di Kemang?
-    * Lo lebih pilih naik MRT atau KRL pas jam sibuk?
-    * Mending makan sate taichan Senayan atau sate Padang Ajo Ramon?
-    * Lebih nostalgia main ke Dunia Fantasi atau Taman Mini?
-    * Lo lebih pilih ngemil martabak manis tipis kering atau martabak tebal keju?
-    * Mending jajan cilok pinggir jalan atau sushi mall premium?
-    * Lebih ikonik nasi goreng kambing Kebon Sirih atau bubur ayam Barito?
-    * Lo lebih pilih nonton konser di JIExpo atau di Istora Senayan?
-    * Mending healing ke Ancol atau ke Ragunan?
-    * Lebih rame nongkrong di M Bloc atau di SCBD?
-    * Lo lebih pilih es doger Cikini atau es podeng Tanah Abang?
-    * Mending belanja elektronik di Glodok atau di ITC Roxy?
-    * Lebih nostalgia jajan otak-otak Ancol atau bakso Malang keliling?
-    * Lo lebih pilih nongkrong sampai pagi di Kemang atau di Melawai?
-    * Mending jajan kopi sachet warkop atau cold brew fancy Jaksel?
-    * Lebih rame ngabuburit di Monas atau di Senayan?
-    * Lo lebih pilih main futsal Kemayoran atau badminton Gelora Bung Karno?
-    * Mending staycation di hotel pusat kota atau villa Puncak?
-    * Lebih seru nongkrong di Tebet Eco Park atau Hutan Kota GBK?
-    * Lo lebih pilih commute Bekasi–Jakarta naik KRL atau bawa motor tiap hari?
-    * Mending makan pecel lele Kalimalang atau ayam geprek Benhil?
-    * Lebih nostalgia jajan kue cubit Setiabudi atau roti bakar Cikini?
-    * Lo lebih pilih ojol Grab atau Gojek pas jam hujan?
-    * Mending buka laptop di Perpus Nasional atau di coffee shop hits?
-    * Lebih rame nongkrong malem di Kota Tua atau SCBD?
-    * Lo lebih pilih makan ketoprak Benhil atau gado-gado Bonbin?
-    * Mending beli baju lebaran di Tanah Abang atau Thamrin City?
-    * Lebih ikonik boba Jaksel atau es teh manis warteg?
-    * Lo lebih pilih ngemil gorengan depan gang atau snack import mall?
-    * Lebih heboh konser di GBK atau festival musik di Bali?
-    * Mending nongkrong di Warung Upnormal atau kafe estetik Jaksel?
-    * Lebih melegenda Indomie rebus tengah malam atau mie instan viral Korea?
-    * Lo lebih pilih maratonin sinetron Ikatan Cinta atau drakor terbaru?
-    * Lebih ikonik nonton film di XXI atau layar tancap kampung?
-    * Mending ikut hype Citayam Fashion Week atau festival cosplay di Jakarta?
-    * Lebih seru main Mobile Legends bareng temen atau PUBG rame-rame?
-    * Lo lebih pilih ngidol K-Pop atau dukung band indie lokal?
-    * Lebih enak dapet arahan jelas dari lead atau kebebasan eksplorasi tanpa batas?
-    * Kalau ide lo ditolak, lo lebih pilih ngejelasin lagi atau langsung move on ke opsi lain?
-    * Mending satu tim selalu sinkron jam kerja atau fleksibel asal hasilnya beres?
-    * Lebih suka tim yang rajin dokumentasi atau tim yang lebih banyak action?
-    * Kalau ada gap komunikasi, lo lebih pilih diselesaikan via chat, call, atau tatap muka?
-    * Mending satu desainer handle end-to-end journey atau bagi-bagi spesialis (UX, UI, riset)?
-    * Lebih nyaman kolaborasi sama stakeholder teknis (engineer) atau stakeholder bisnis?
-    * Kalau hasil usability test gagal, lo lebih pilih iterasi cepat atau reset total desain?
-    * Mending dapet partner developer yang kritis soal detail desain atau yang nurut semua aja?
-    * Lebih seru kerja bareng tim yang sering debat ide atau tim yang cenderung harmonis?
-    * Lo lebih pilih jadi problem solver di tim atau jadi orang yang jago nge-visual-in ide?
-    * Mending ada satu orang UX researcher khusus atau semua anggota tim ikut riset?
-    * Lebih gampang align visi desain lewat Figma file detail atau workshop bareng whiteboard?
-    * Lo lebih suka daily standup singkat atau weekly catch-up yang lebih dalam?
-    * Kalau deadline mepet, lo lebih pilih cut scope fitur atau push jam kerja lebih lama?
-    * Mending satu style guide ketat atau desain fleksibel sesuai kreativitas tiap anggota?
-    * Lebih nyaman handle banyak stakeholder dengan ekspektasi beda-beda atau satu stakeholder tapi sering berubah pikiran?
-    * Lo lebih pilih kerja remote lintas zona waktu atau onsite bareng tiap hari?
-    * Mending punya tim yang jago riset tapi visual biasa aja, atau tim yang visual keren tapi minim riset?
-    * Lebih seru kolaborasi lintas divisi (marketing, sales, CS) atau fokus di tim produk aja?
-    * Kalau ada ide baru, lo lebih pilih prototyping cepat buat validasi atau diskusi panjang dulu di tim?
-    * Lebih nyaman dapet brief proyek lengkap di awal atau update bertahap sepanjang jalan?
-    * Kalau ada dua solusi desain sama bagusnya, lo lebih pilih A/B testing atau diskusi tim?
-    * Mending dapet apresiasi langsung dari user atau pengakuan dari manajemen?
-    * Lebih gampang dapet ide kreatif pas kerja bareng tim atau saat sendirian?
-    * Kalau workload lagi numpuk, lo lebih pilih delegasi ke tim atau lembur sendiri?
-    * Mending satu tim punya role jelas banget atau fleksibel saling backup?
-    * Lebih seru dapet inspirasi desain dari kompetitor atau dari eksperimen internal?
-    * Kalau ada feature creep, lo lebih pilih challenge PM atau adaptasi desain?
-    * Mending tim kecil sering sync harian atau tim gede sync mingguan?
-    * Lebih nyaman dapet feedback via comment Figma atau presentasi langsung di meeting?
-    * Lebih pilih investasi di Bitcoin atau Ethereum?
-    * Mending trading harian atau HODL jangka panjang?
-    * Lebih rame komunitas crypto di Twitter atau Telegram?
-    * Lo lebih percaya analisis teknikal charting atau fundamental project?
-    * Mending ikut hype meme coin atau fokus ke project DeFi serius?
-    * Lebih worth coba staking atau mining?
-    * Lo lebih pilih NFT art atau NFT game?
-    * Mending belajar crypto dari YouTube influencer lokal atau forum internasional?
-    * Lebih deg-degan market crash atau FOMO pas harga terbang?
-    * Lo lebih pilih pake exchange lokal atau internasional buat trading?
-    * Lebih enak sarapan bubur diaduk atau nggak diaduk?
-    * Mending makan nasi Padang langsung di warung atau bungkus pakai kertas cokelat?
-    * Lebih segar es kelapa muda atau es cendol pas siang terik?
-    * Lo lebih pilih sate ayam Madura atau sate kambing Tegal?
-    * Mending jajan pecel lele tenda biru atau fast food internasional?
-    * Lebih nagih keripik pedas level tinggi atau kerupuk putih renyah?
-    * Lo lebih pilih bakso urat atau bakso telur?
-    * Mending ngemil martabak manis atau terang bulan kekinian?
-    * Lebih ikonik rendang Padang atau gudeg Jogja?
-    * Lo lebih suka makan di kaki lima rame atau restoran fancy?
-
+    * Mengapa korupsi makin canggih, tapi hukuman makin ringan?
+    * Siapa yang menang saat rakyat marah?
+    * Apakah DPR butuh rakyat, atau hanya kursi?
+    * Bagaimana rasanya makan dari uang rakyat yang kelaparan?
+    * Kapan janji reformasi dibayar dengan kebohongan?
+    * Mengapa semakin banyak anggota DPR, semakin sedikit yang peduli?
+    * Apakah KPK lahir untuk menangkap koruptor atau hanya simbol?
+    * Siapa yang takut pada pemilu jujur?
+    * Mengapa hukum tajam ke bawah, tumpul ke atas?
+    * Apakah demokrasi hanya ritual lima tahunan?
+    * Mengapa koruptor bisa jadi pahlawan di parlemen?
+    * Bagaimana cara menjadi kaya cepat di DPR?
+    * Apakah rakyat hanya suara, bukan manusia?
+    * Mengapa janji 17+8 dikubur, tapi gaji DPR naik?
+    * Kapan rakyat boleh audit kekayaan anggota DPR?
+    * Mengapa keadilan hanya milik yang punya kuasa?
+    * Apakah hukum hanya alat untuk menekan, bukan melindungi?
+    * Siapa yang mengizinkan DPR jadi pasar korupsi?
+    * Mengapa perubahan hanya terjadi di pidato?
+    * Apakah Indonesia butuh revolusi, atau cukup reformasi palsu?
+    * Mengapa rakyat harus bayar mahal untuk kesalahan elite?
+    * Bagaimana rasanya tidur nyenyak setelah mengkhianati rakyat?
+    * Apakah parpol hanya mesin uang, bukan wakil rakyat?
+    * Mengapa UU dibuat untuk melindungi penjahat, bukan rakyat?
+    * Kapan kejujuran dianggap ancaman di DPR?
+    * Mengapa korupsi dianggap budaya, bukan kejahatan?
+    * Apakah rakyat hanya bahan kampanye?
+    * Mengapa anggota DPR tak pernah salah?
+    * Siapa yang membiarkan KPK dikerdilkan?
+    * Mengapa kebenaran selalu kalah dari kekuasaan?
+    * Apakah politik hanya soal bagi-bagi uang?
+    * Mengapa rakyat harus miskin agar elite tetap kaya?
+    * Mengapa janji reformasi jadi lelucon?
+    * Apakah Indonesia sedang menuju oligarki terbuka?
+    * Mengapa kritik dianggap musuh negara?
+    * Bagaimana cara menjadi miliarder dalam 5 tahun di DPR?
+    * Mengapa rakyat tak boleh protes, tapi koruptor boleh bebas?
+    * Apakah keadilan hanya ada di mimpi?
+    * Mengapa anggota DPR tak pernah dihukum mati?
+    * Siapa yang menjamin hukum tidak diskriminatif?
+    * Mengapa rakyat harus percaya lagi?
+    * Apakah parlemen adalah benteng korupsi?
+    * Mengapa kejujuran dianggap lemah?
+    * Mengapa rakyat dituduh anarkis, tapi koruptor dihormati?
+    * Apakah Indonesia butuh pemimpin baru, atau sistem baru?
+    * Mengapa kebenaran selalu dibungkam?
+    * Mengapa rakyat tak boleh tahu kekayaan pejabat?
+    * Apakah demokrasi hanya sandiwara?
+    * Mengapa hukum tak pernah menyentuh yang paling atas?
+    * Siapa yang membuat rakyat percaya bahwa politik kotor adalah normal?
+    * Siapa yang membuat rakyat takut?
+    * Mengapa keadilan sosial hanya slogan?
+    * Apakah rakyat hanya alat legitimasi?
+    * Mengapa anggota DPR tak pernah mundur?
+    * Mengapa kejujuran dianggap idealisme yang membahayakan?
+    * Apakah Indonesia sedang menuju kehancuran sistemik?
+    * Mengapa rakyat harus membayar utang elite?
+    * Mengapa korupsi dianggap risiko jabatan?
+    * Apakah rakyat hanya pemirsa dalam drama politik?
+    * Mengapa kebenaran tak pernah menang?
+    * Mengapa hukum tak pernah menyentuh keluarga pejabat?
+    * Siapa yang menjamin DPR tidak korup?
+    * Mengapa rakyat tak boleh memilih langsung anggota DPR?
+    * Apakah sistem proporsional hanya alat oligarki?
+    * Mengapa rakyat harus menerima kebohongan?
+    * Apakah keadilan hanya milik yang punya uang?
+    * Mengapa anggota DPR tak pernah diadili rakyat?
+    * Mengapa kejujuran dianggap ancaman?
+    * Apakah Indonesia butuh revolusi moral?
+    * Mengapa rakyat tak boleh marah?
+    * Mengapa korupsi dianggap hal biasa?
+    * Apakah politik hanya permainan kekuasaan?
+    * Mengapa rakyat tak boleh tahu anggaran sebenarnya?
+    * Mengapa hukum hanya menjerat yang tak punya perlindungan?
+    * Mengapa para politisi yang sama yang dulu berteriak 'reformasi' di jalanan pada tahun 1998, kini duduk di istana dan parlemen, dan memberikan respons yang mirip dengan rezim yang mereka lawan dulu?
+    * Apakah 'Indonesia Emas 2045' hanya akan menjadi slogan kosong jika fondasi keadilan sosial, supremasi hukum, dan demokrasinya rapuh dan terus menerus dikhianati?
+     Bagaimana mungkin reformasi yang dijanjikan pada 1998 masih belum tuntas setelah lebih dari dua dekade?
+    * Mengapa tujuan awal reformasi untuk menghilangkan KKN tampaknya malah semakin jauh dari kenyataan?
+    * Apakah transisi kekuasaan pasca-Soeharto sebenarnya telah membawa perubahan substantif atau hanya pergantian elit?
+    * Bagaimana evaluasi Bapak terhadap peran tokoh-tokoh reformasi seperti Amien Rais dalam konteks kinerja lembaga negara saat ini?
+    * Mengapa amandemen UUD 1945 yang begitu banyak jumlahnya tampaknya tidak mampu mencegah kembalinya praktik-praktik otoriter?
+    * Apakah demokrasi Indonesia pasca-reformasi telah menjadi sekadar formalitas tanpa substansi?
+    * Bagaimana cara menilai keberhasilan sistem pemilu yang lebih demokratis dalam menghasilkan pemimpin yang berkualitas?
+    * Mengapa reformasi birokrasi menjadi salah satu agenda yang paling sulit diwujudkan?
+    * Apakah kebebasan pers yang dijanjikan pada era reformasi benar-benar terwujud atau masih terbatasi?
+    * Bagaimana mungkin kesenjangan ekonomi justru semakin lebar di era demokrasi?
+    * Mengapa penegakan hukum terhadap pelanggaran HAM masa lalu masih terhambat?
+    * Apakah reformasi sektor keamanan telah berhasil mencegah keterlibatan militer dalam politik?
+    * Bagaimana cara memastikan amandemen konstitusi benar-benar berfungsi sebagai jaminan hak rakyat?
+    * Mengapa parpol-parpol baru yang muncul pasca-reformasi tampaknya mengulangi pola lama?
+    * Apakah sistem checks and balances antar lembaga negara benar-benar berfungsi atau hanya teori?
+    * Bagaimana cara menilai keberhasilan desentralisasi dalam mendorong kesejahteraan daerah?
+    * Mengapa reformasi sektor peradilan masih menyisakan banyak masalah?
+    * Apakah tujuan awal reformasi untuk menciptakan pemerintahan yang bersih dan transparan telah tercapai?
+    * Bagaimana cara memutus siklus politik uang yang semakin mengakar?
+    * Mengapa generasi pasca-reformasi tampaknya masih menghadapi tantangan yang sama dengan generasi sebelumnya?
+    * Apakah nilai-nilai demokrasi benar-benar telah ditanamkan dalam budaya politik Indonesia?
+    * Bagaimana cara mencegah kembalinya praktik-praktik otoriter di tengah sistem demokrasi?
+    * Mengapa upaya pemberantasan korupsi masih terbatas pada penindakan individu, bukan perbaikan sistem?
+    * Apakah reformasi politik yang dijalankan selama ini telah mencerminkan aspirasi rakyat secara utuh?
+    * Bagaimana cara memastikan perjuangan reformasi 1998 tidak sia-sia dan benar-benar membawa manfaat bagi rakyat?
+    * Apakah sistem pemilu yang lebih demokratis telah menghasilkan pemimpin yang lebih berkualitas?
+    * Mengapa partisipasi politik masyarakat cenderung menurun di setiap pemilu?
+    * Bagaimana cara mengatasi politik uang yang semakin mengakar di setiap pemilihan?
+    * Apakah koalisi partai politik pasca-pemilu benar-benar mencerminkan kepentingan rakyat?
+    * Mengapa parpol yang sama-sama baru justru mengulangi pola lama politik transaksional?
+    * Bagaimana cara memastikan sistem pemilu tidak hanya formalitas demokrasi?
+    * Apakah keberagaman partai politik benar-benar memberikan pilihan yang berarti bagi rakyat?
+    * Mengapa banyak calon pemimpin terpilih yang ternyata tidak memenuhi harapan?
+    * Bagaimana cara mencegah money politics dalam sistem demokrasi?
+    * Apakah sistem pemilu langsung untuk presiden telah menghasilkan pemimpin yang lebih baik?
+    * Mengapa parpol besar cenderung menguasai politik nasional tanpa kontrol yang efektif?
+    * Bagaimana cara meningkatkan kualitas debat politik dan kampanye yang berkualitas?
+    * Apakah sistem koalisi di DPR benar-benar efektif atau justru menghambat?
+    * Mengapa sistem pemilu serentak tidak serta-merta memperbaiki kualitas demokrasi?
+    * Bagaimana cara memastikan suara rakyat benar-benar didengar dalam sistem representatif?
+    * Apakah sistem sanksi bagi parpol yang melanggar aturan sudah cukup efektif?
+    * Mengapa banyak pemilih yang masih terpengaruh oleh politik identitas?
+    * Bagaimana cara meningkatkan kesadaran politik masyarakat untuk memilih berdasarkan program?
+    * Apakah sistem kampanye yang ada sudah memungkinkan persaingan yang sehat?
+    * Mengapa banyak pemilih yang apatis terhadap proses politik?
+    * Bagaimana cara memastikan integritas lembaga penyelenggara pemilu tetap terjaga?
+    * Apakah sistem pengawasan pemilu sudah cukup kuat untuk mencegah kecurangan?
+    * Mengapa banyak calon pemimpin yang tidak memiliki track record jelas bisa menang?
+    * Bagaimana cara memperkuat akuntabilitas pemimpin terpilih kepada rakyat?
+    * Bagaimana cara memutus siklus korupsi yang terus berulang di setiap level pemerintahan?
+    * Mengapa KPK yang semula kuat justru mengalami pelemahan dalam beberapa tahun terakhir?
+    * Apakah sistem pengawasan internal pemerintahan sudah cukup efektif untuk mencegah korupsi?
+    * Bagaimana cara mencegah praktik korupsi yang semakin canggih dan sulit terdeteksi?
+    * Mengapa banyak kasus korupsi besar yang melibatkan pejabat tinggi tidak pernah tuntas?
+    * Apakah hukuman bagi koruptor sudah cukup memberikan efek jera?
+    * Bagaimana cara memastikan KPK tetap independen dan bebas dari intervensi politik?
+    * Mengapa praktik gratifikasi masih menjadi hal yang umum di lingkungan birokrasi?
+    * Apakah sistem pengadaan barang dan jasa sudah cukup transparan?
+    * Bagaimana cara mencegah praktik nepotisme dalam pengangkatan pejabat?
+    * Mengapa sistem whistleblower masih belum efektif dalam mengungkap korupsi?
+    * Apakah masyarakat sipil memiliki peran yang cukup dalam pengawasan pemerintah?
+    * Bagaimana cara memperkuat sistem check and balances antar lembaga negara?
+    * Mengapa banyak kasus korupsi yang terkait dengan proyek infrastruktur besar?
+    * Apakah sistem pengawasan keuangan negara sudah cukup ketat?
+    * Bagaimana cara mencegah korupsi dalam bentuk pungutan liar di daerah?
+    * Mengapa banyak koruptor yang lolos dari jerat hukum karena sistem hukum yang lemah?
+    * Apakah sistem peradilan sudah cukup adil dalam menangani kasus korupsi?
+    * Bagaimana cara memperkuat sistem pengawasan internal di setiap instansi pemerintah?
+    * Mengapa praktik korupsi masih menjadi biaya transaksi dalam banyak urusan?
+    * Apakah sistem sanksi bagi koruptor sudah cukup berat?
+    * Bagaimana cara meningkatkan partisipasi masyarakat dalam pemberantasan korupsi?
+    * Mengapa banyak kasus korupsi yang terkait dengan politik uang?
+    * Apakah sistem pengawasan terhadap lembaga-lembaga negara sudah cukup efektif?
+    * Bagaimana cara membuat pemberantasan korupsi menjadi gerakan nasional yang melibatkan seluruh elemen masyarakat?
+    * Bagaimana cara mengurangi kesenjangan ekonomi yang semakin lebar antara kaya dan miskin?
+    * Mengapa pertumbuhan ekonomi tinggi tidak otomatis meningkatkan kesejahteraan rakyat?
+    * Apakah sistem perpajakan Indonesia sudah cukup adil bagi seluruh lapisan masyarakat?
+    * Bagaimana cara mencegah konsentrasi kekayaan di tangan segelintir orang?
+    * Mengapa banyak program pengentasan kemiskinan yang gagal mencapai target?
+    * Apakah sistem proteksi sosial sudah cukup melindungi rakyat kecil?
+    * Bagaimana cara meningkatkan kualitas lapangan kerja yang tersedia?
+    * Mengapa upah minimum masih belum mencukupi untuk kebutuhan hidup layak?
+    * Apakah sistem perlindungan buruh sudah cukup kuat?
+    * Bagaimana cara mencegah pengangguran terutama di kalangan generasi muda?
+    * Mengapa banyak UMKM yang kesulitan mengakses modal dan pasar?
+    * Apakah kebijakan industri sudah cukup mendukung pertumbuhan sektor riil?
+    * Bagamaana cara mencegah dominasi asing dalam perekonomian nasional?
+    * Mengapa sektor pertanian yang menjadi tulang punggung ekonomi justru terabaikan?
+    * Apakah sistem distribusi barang dan jasa sudah cukup efisien?
+    * Bagaimana cara meningkatkan daya saing produk dalam negeri?
+    * Mengapa banyak daerah yang masih bergantung pada transfer dari pusat?
+    * Apakah sistem perencanaan pembangunan sudah cukup partisipatif?
+    * Bagaimana cara mencegah eksploitasi sumber daya alam yang berlebihan?
+    * Mengapa sektor pariwisata yang potensial tidak sepenuhnya dimanfaatkan?
+    * Apakah sistem perbankan sudah cukup inklusif bagi seluruh lapisan masyarakat?
+    * Bagamaana cara meningkatkan kualitas infrastruktur di daerah terpencil?
+    * Mengapa banyak proyek strategis nasional yang kontroversial?
+    * Apakah sistem pengelolaan utang negara sudah cukup hati-hati?
+    * Bagaimana cara memastikan pembangunan ekonomi berkelanjutan dan inklusif?
+    * Bagaimana cara menghentikan praktik kekerasan aparat terhadap warga sipil?
+    * Mengapa banyak kasus pelanggaran HAM masa lalu yang belum terselesaikan?
+    * Apakah sistem perlindungan saksi dan korban sudah cukup efektif?
+    * Bagaimana cara mencegah kriminalisasi terhadap aktivis dan pejuang HAM?
+    * Mengapa kebebasan berekspresi masih sering dibatasi oleh otoritas?
+    * Apakah sistem pengawasan terhadap aparat keamanan sudah cukup kuat?
+    * Bagaimana cara menegakkan hukum terhadap pelanggar HAM tanpa terkecuali?
+    * Mengapa banyak daerah yang masih terjadi konflik horizontal?
+    * Apakah perlindungan bagi kelompok minoritas sudah cukup memadai?
+    * Bagaimana cara mencegah diskriminasi berbasis agama, suku, dan ras?
+    * Mengapa banyak kasus kekerasan terhadap perempuan yang tidak ditangani serius?
+    * Apakah hak-hak pekerja sudah cukup dilindungi oleh undang-undang?
+    * Bagaimana cara memastikan akses terhadap kesehatan dan pendidikan bagi semua?
+    * Mengapa banyak masyarakat adat yang kehilangan hak atas tanahnya?
+    * Apakah sistem pengaduan pelanggaran HAM sudah cukup mudah diakses?
+    * Bagaimana cara meningkatkan kesadaran HAM di kalangan aparat penegak hukum?
+    * Mengapa banyak kasus penghilangan orang paksa yang belum terungkap?
+    * Apakah kebebasan pers benar-benar dijamin dalam praktiknya?
+    * Bagamaana cara mencegah kriminalisasi ulama dan aktivis agama?
+    * Mengapa hak-hak LGBT masih menjadi kontroversi yang belum terselesaikan?
+    * Apakah sistem rehabilitasi korban pelanggaran HAM sudah cukup baik?
+    * Bagaimana cara memperkuat lembaga-lembaga perlindungan HAM?
+    * Mengapa banyak kasus kekerasan struktural yang tidak tertangani?
+    * Apakah sistem penegakan hukum internasional sudah cukup efektif?
+    * Bagamaana cara memastikan Indonesia benar-benar menegakkan prinsip HAM dalam setiap kebijakan?
+    * Mengapa tuntutan-tuntutan yang disuarakan tampaknya sangat mirip dengan tuntutan reformasi 1998?
+    * Apakah tenggat waktu satu minggu untuk tuntutan jangka pendek realistis untuk dipenuhi?
+    * Bagaimana cara menilai respons pemerintah dan DPR terhadap tuntutan rakyat ini?
+    * Mengapa tunjangan anggota DPR sebesar 50 juta per bulan menjadi titik api kemarahan?
+    * Apakah penolakan terhadap RUU Ciptakerja menjadi simbol perlawanan terhadap kepentingan asing?
+    * Bagaimana cara memastikan tuntutan penegakan hukum terhadap koruptor benar-benar ditindaklanjuti?
+    * Mengapa kasus kematian Affan Kurniawan menjadi semacam martir bagi gerakan ini?
+    * Apakah tuntutan reformasi sistem peradilan akan benar-benar mengubah praktik kekerasan aparat?
+    * Bagaimana cara menilai efektivitas gerakan yang lahir dari media sosial ini?
+    * Mengapa transparasi anggaran DPR menjadi salah satu tuntutan utama?
+    * Apakah tuntutan pengembalian TNI ke barak realistis dalam situasi saat ini?
+    * Bagaimana cara memastikan tuntutan ekonomi kerakyatan tidak kontra produktif?
+    * Mengapa perlindungan hak masyarakat adat menjadi bagian integral dari tuntutan?
+    * Apakah tuntutan revisi UU TNI dan Polri akan berhasil menghentikan kekerasan?
+    * Bagaimana cara menilai konsistensi pemerintah dalam menanggapi tuntutan rakyat?
+    * Mengapa tuntutan penghapusan diskriminasi menjadi sangat relevan saat ini?
+    * Apakah tuntutan penguatan lembaga negara independen akan berhasil?
+    * Bagaimana cara memastikan tuntutan penghapusan KKN dalam pengadaan benar-benar terealisasi?
+    * Mengapa kebebasan berserikat dan berkumpul menjadi tuntutan mendasar?
+    * Apakah tuntutan penghapusan sistem patronase dalam politik realistis?
+    * Bagaimana cara memastikan tuntutan partisipasi masyarakat dalam pengambilan keputusan terwujud?
+    * Mengapa penegakan prinsip demokrasi menjadi tuntutan akhir yang paling krusial?
+    * Apakah gerakan ini akan berhasil mengubah arah politik Indonesia?
+    * Bagaimana cara memastikan momentum gerakan ini tidak surut seiring waktu?
+    * Mengapa tuntutan rakyat saat ini menjadi ujian terberat bagi demokrasi Indonesia?
+    * Bagaimana cara memulihkan kepercayaan publik yang sudah sangat terkikis terhadap DPR?
+    * Mengapa fungsi legislasi DPR seringkali tidak berpihak pada kepentingan rakyat?
+    * Apakah sistem pengawasan internal parlemen sudah cukup efektif?
+    * Bagaimana cara memastikan anggota DPR benar-benar mewakili suara rakyat?
+    * Mengapa banyak anggota DPR yang terlibat kasus korupsi masih bisa lolos dari sanksi?
+    * Apakah sistem gaji dan tunjangan anggota DPR sudah proporsional?
+    * Bagaimana cara meningkatkan kualitas anggota DPR yang terpilih?
+    * Mengapa fungsi pengawasan DPR terhadap eksekutif seringkali lemah?
+    * Apakah sistem komisi di DPR sudah berfungsi optimal?
+    * Bagaimana cara memastikan anggota DPR tidak sekadar menjadi "mesin suara"?
+    * Mengapa banyak RUU yang penting untuk rakyat terhambat di DPR?
+    * Apakah sistem fraksi di DPR masih relevan dengan dinamika politik saat ini?
+    * Bagaimana cara meningkatkan transparansi dan akuntabilitas kinerja DPR?
+    * Mengapa DPR seringkali dianggap tidak peka terhadap aspirasi rakyat?
+    * Apakah sistem hak angket dan interpelasi sudah cukup efektif?
+    * Bagaimana cara memperkuat etika dan moral anggota parlemen?
+    * Mengapa banyak anggota DPR yang terpilih justru memiliki track record bermasalah?
+    * Apakah sistem rekruitmen anggota parlemen sudah cukup selektif?
+    * Bagaimana cara memastikan independensi anggota DPR dari kepentingan partai?
+    * Mengapa DPR seringkali dianggap lebih mewakili kepentingan pengusaha?
+    * Apakah sistem jadwal sidang DPR sudah optimal untuk kinerja?
+    * Bagaimana cara meningkatkan kualitas produk legislasi yang dihasilkan?
+    * Mengapa banyak anggota DPR yang tidak hadir saat rapat penting?
+    * Apakah sistem pengawasan publik terhadap DPR sudah cukup kuat?
+    * Bagaimana cara memastikan DPR benar-benar menjadi "wakil rakyat"?
+    * Mengapa banyak program pembangunan besar-gedean justru terbukti kontra produktif?
+    * Apakah generasi muda saat ini memiliki peluang yang lebih baik untuk mewujudkan perubahan?
+    * Bagaimana cara membangun budaya politik yang sehat dan demokratis?
+    * Mengapa pendidikan kritis menjadi kunci utama perubahan?
+    * Apakah Indonesia sudah siap menghadapi tantangan global di era digital?
+    * Bagaimana cara membangun ekonomi yang inklusif dan berkelanjutan?
+    * Mengapa reformasi mental menjadi sangat krusial untuk kemajuan bangsa?
+    * Apakah sistem pemerintahan saat ini masih relevan dengan tuntutan zaman?
+    * Bagaimana cara memastikan kemajuan teknologi tidak memperlebar kesenjangan?
+    * Mengapa perlindungan lingkungan hidup menjadi investasi jangka panjang?
+    * Apakah nilai-nilai pancasila masih relevan sebagai pandangan hidup bangsa?
+    * Bagaimana cara membangun identitas nasional yang kuat di era globalisasi?
+    * Mengapa kerjasama antar generasi menjadi kunci keberhasilan reformasi?
+    * Apakah Indonesia sudah siap menjadi pemain global yang dihormati?
+    * Bagaimana cara memastikan kemajuan tidak mengorbankan nilai-nilai kemanusiaan?
+    * Mengapa perlindungan hak minoritas menjadi indikator kematangan demokrasi?
+    * Apakah sistem pertahanan negara sudah cukup kuat untuk menghadapi ancaman?
+    * Bagaimana cara membangun kemitraan strategis yang menguntungkan?
+    * Mengapa inovasi dan kreativitas menjadi modal utama di abad 21?
+    * Apakah sistem pendidikan sudah cukup mempersiapkan generasi masa depan?
+    * Bagaimana cara memastikan kemajuan teknologi tidak mengancam nilai-nilai luhur?
+    * Mengapa perlindungan budaya dan warisan menjadi tanggung jawab bersama?
+    * Apakah Indonesia sudah siap menghadapi perubahan iklim global?
+    * Bagaimana cara membangun masa depan yang lebih baik bagi semua anak bangsa?
+    * Apakah DPR mewakili rakyat?
+    * Mengapa keadilan selalu terlambat?
+    * Mengapa rakyat tak boleh menghakimi?
+    * Apakah kejujuran akan pernah menang?
+    * Mengapa korupsi terus berulang?
+    * Mengapa rakyat harus membayar?
+    * Apakah Indonesia menuju kehancuran?
+    * Mengapa kebenaran tak dihargai?
+    * Mengapa anggota DPR tak diusir?
+    * Mengapa hukum tak menyentuh pemodal?
+    * Siapa yang membuat rakyat pasrah?
+    * Mengapa keadilan hanya di teori?
+    * Apakah rakyat hanya komoditas?
