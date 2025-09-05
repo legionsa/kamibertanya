@@ -1,37 +1,16 @@
 <!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
 <script>
 (function () {
-  // --- Helpers from your original script ---
-  const isMobile = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820);
-  const getTargetDimensions = () => isMobile() ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
-  const wrapLines = (ctx, text, maxWidth) => {
-    const words = (text || '').trim().split(/\s+/), lines = [];
-    let line = '';
-    for (let i = 0; i < words.length; i++) {
-      const test = line ? `${line} ${words[i]}` : words[i];
-      if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = words[i]; } else { line = test; }
-    }
-    if (line) lines.push(line);
-    return lines;
-  };
-  const getFooterLines = () => {
-    const footer = document.querySelector('footer');
-    return footer ? Array.from(footer.querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean) : [];
-  };
-
-  /**
-   * Main Image Generator
-   * This function now reads the live CSS variables to recreate the
-   * background image and duotone effect on the canvas before adding text.
-   */
+  // --- Main Image Generator (from previous step) ---
   async function generateShareImage() {
+    const getTargetDimensions = () => /Android|iPhone|iPad|iPod|iPod Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
 
-    // --- 1. READ LIVE STYLES & RECREATE BACKGROUND ---
+    // 1. Recreate the background and duotone effect
     const css = getComputedStyle(document.documentElement);
     const surface = (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
     const bgVar = css.getPropertyValue('--bg-image') || '';
@@ -43,17 +22,14 @@
     const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
     if (m && m[1]) bgUrl = m[1];
 
-    // Fill with base color
     ctx.fillStyle = surface;
     ctx.fillRect(0, 0, width, height);
 
-    // Draw background image (if any)
     if (bgUrl) {
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
-          // Scale image to 'cover' the canvas
           const ir = img.naturalWidth / img.naturalHeight, cr = width / height;
           let dw = width, dh = height;
           if (ir > cr) { dh = height; dw = dh * ir; } else { dw = width; dh = dw / ir; }
@@ -61,7 +37,6 @@
           ctx.save();
           ctx.globalAlpha = bgOpacity;
           ctx.drawImage(img, dx, dy, dw, dh);
-          // Apply grayscale filter
           const imgData = ctx.getImageData(0, 0, width, height);
           const d = imgData.data;
           for (let i = 0; i < d.length; i += 4) {
@@ -77,7 +52,6 @@
       });
     }
 
-    // Apply duotone overlay
     ctx.globalCompositeOperation = 'multiply';
     const radial = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, Math.max(width, height) * 0.6);
     radial.addColorStop(0, `${duoA}66`); radial.addColorStop(1, '#0000');
@@ -88,73 +62,119 @@
     const top = ctx.createLinearGradient(0, 0, 0, height);
     top.addColorStop(0, `${accent}1A`); top.addColorStop(1, '#0000');
     ctx.fillStyle = top; ctx.fillRect(0, 0, width, height);
-    ctx.globalCompositeOperation = 'source-over'; // Reset blend mode
+    ctx.globalCompositeOperation = 'source-over';
 
-    // --- 2. DRAW TEXT OVER THE STYLED BACKGROUND ---
+    // 2. Draw text
     const questionText = (document.getElementById('question-display')?.innerText || '').trim();
-    const footerLines = getFooterLines();
+    const footerLines = Array.from(document.querySelector('footer').querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean);
     const padding = Math.round(Math.min(width, height) * 0.05);
     const maxTextWidth = Math.round(width * 0.82);
+    const wrapLines = (ctx, text, maxWidth) => {
+        const words = (text || '').trim().split(/\s+/), lines = [];
+        let line = '';
+        for (let i = 0; i < words.length; i++) {
+            const test = line ? `${line} ${words[i]}` : words[i];
+            if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = words[i]; } else { line = test; }
+        }
+        if (line) lines.push(line);
+        return lines;
+    };
 
-    // Footer typography
-    const footerTextColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
-    ctx.fillStyle = footerTextColor;
+    const textColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
+    ctx.fillStyle = textColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.font = `${Math.round(width * 0.028)}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
     const footerLineHeight = Math.round(width * 0.036);
-    const footerBlockHeight = footerLines.length * footerLineHeight;
-    const footerBottomPad = Math.max(padding, Math.round(height * 0.04));
-    const footerTopY = height - footerBottomPad - footerBlockHeight;
+    const footerTopY = height - (Math.max(padding, Math.round(height * 0.04))) - (footerLines.length * footerLineHeight);
     footerLines.forEach((line, idx) => ctx.fillText(line, width / 2, footerTopY + (idx + 1) * footerLineHeight));
-
-    // Question typography
-    const questionTextColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
-    ctx.fillStyle = questionTextColor;
+    
     ctx.textBaseline = 'top';
     let fontPx = Math.round(width * 0.072);
     const setFont = px => { ctx.font = `bold ${px}px system-ui, -apple-system, Segoe UI, Roboto, Arial`; };
     setFont(fontPx);
-    let lines = wrapLines(ctx, questionText, maxTextWidth);
     const gapToFooter = footerLines.length ? Math.round(height * 0.07) : Math.round(height * 0.1);
-    const availableHeight = footerTopY - padding - gapToFooter;
     let lineHeight = Math.round(fontPx * 1.25);
-    while ((lines.length * lineHeight) > availableHeight && fontPx > 20) {
-      fontPx -= 2; setFont(fontPx); lineHeight = Math.round(fontPx * 1.25);
-      lines = wrapLines(ctx, questionText, maxTextWidth);
+    let lines = wrapLines(ctx, questionText, maxTextWidth);
+    while ((lines.length * lineHeight) > (footerTopY - padding - gapToFooter) && fontPx > 20) {
+        fontPx -= 2; setFont(fontPx); lineHeight = Math.round(fontPx * 1.25); lines = wrapLines(ctx, questionText, maxTextWidth);
     }
-    const totalTextHeight = lines.length * lineHeight;
-    const startY = padding + Math.max(0, Math.floor(((footerTopY - gapToFooter - padding) - totalTextHeight) / 2));
+    const startY = padding + Math.max(0, Math.floor(((footerTopY - gapToFooter - padding) - (lines.length * lineHeight)) / 2));
     lines.forEach((l, i) => ctx.fillText(l, width / 2, startY + i * lineHeight));
 
-    // --- 3. EXPORT IMAGE ---
+    // 3. Export
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
-    const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
-    return { blob, file };
+    return { blob, file: new File([blob], 'icebreaker.png', { type: 'image/png' }) };
   }
 
-  // --- Share/Download and Event Listeners ---
-  async function doShareOrDownload() {
+  // --- Action Functions ---
+
+  async function doShare() {
     try {
-      const { blob, file } = await generateShareImage(); // Use the updated function
+      const { file } = await generateShareImage();
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: 'Icebreaker' });
       } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'icebreaker.png';
-        document.body.appendChild(a); a.click(); a.remove();
-        URL.revokeObjectURL(url);
-        alert('Image saved. Upload to your story or feed.');
+        alert("Web Share is not supported by your browser. Try downloading the image instead.");
       }
     } catch (e) { console.error(e); alert('Sharing failed.'); }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const share = document.getElementById('post-link');
-    if (share) {
-      share.addEventListener('click', (e) => { e.preventDefault(); doShareOrDownload(); });
+  async function downloadImage() {
+    try {
+        const { blob } = await generateShareImage();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'icebreaker.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        console.error('Download failed:', e);
+        alert('Download failed. Please try again.');
     }
+  }
+
+  async function copyImage() {
+    try {
+        if (!navigator.clipboard || !navigator.clipboard.write) {
+            alert('Copying images is not supported by your browser. The image will be downloaded instead.');
+            await downloadImage();
+            return;
+        }
+        const { blob } = await generateShareImage();
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+        alert('Image copied to clipboard!');
+    } catch (e) {
+        console.error('Copy failed:', e);
+        alert('Copy failed. Please try downloading the image.');
+    }
+  }
+
+  function copyText() {
+    try {
+        const text = document.getElementById('question-display')?.innerText || '';
+        navigator.clipboard.writeText(text);
+        alert('Text copied to clipboard!');
+    } catch (e) {
+        console.error('Copy text failed:', e);
+        alert('Could not copy text.');
+    }
+  }
+
+  // --- Wire up Event Listeners ---
+  document.addEventListener('DOMContentLoaded', () => {
+    const shareBtn = document.getElementById('post-link');
+    const downloadBtn = document.getElementById('download-link');
+    const copyImgBtn = document.getElementById('copy-image-link');
+    const copyTxtBtn = document.getElementById('copy-text-link');
+
+    if(shareBtn) shareBtn.addEventListener('click', (e) => { e.preventDefault(); doShare(); });
+    if(downloadBtn) downloadBtn.addEventListener('click', (e) => { e.preventDefault(); downloadImage(); });
+    if(copyImgBtn) copyImgBtn.addEventListener('click', (e) => { e.preventDefault(); copyImage(); });
+    if(copyTxtBtn) copyTxtBtn.addEventListener('click', (e) => { e.preventDefault(); copyText(); });
   });
 })();
 
@@ -165,13 +185,10 @@
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
   function jitter(hex, j = 8) {
     const h = hex.replace('#', '');
-    const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
-    const n = parseInt(full, 16);
-    let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-    function rand(v) { return clamp(v + Math.round((Math.random() * 2 - 1) * j), 0, 255); }
-    r = rand(r); g = rand(g); b = rand(b);
-    const hh = (x) => x.toString(16).padStart(2, '0');
-    return `#${hh(r)}${hh(g)}${hh(b)}`;
+    const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+    const rand = (v) => clamp(v + Math.round((Math.random() * 2 - 1) * j), 0, 255);
+    const r = rand((n >> 16) & 255), g = rand((n >> 8) & 255), b = rand(n & 255);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0')}`;
   }
   function applyRandomBackground() {
     if (!IMAGES.length) return;
