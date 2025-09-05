@@ -20,111 +20,98 @@ function getComputedBgColor(el) {
 }
 
 // EXACT WYSIWYG capture: theme surface + bg image (20% grayscale) + duotone + accent + DOM (+ watermark)
+// === REPLACE captureShareImage() with this exact function ===
 async function captureShareImage() {
-  // Keep your existing CAPTURE_SELECTOR or fallback to body
-  const CAPTURE_SELECTOR = '#app, main, body';
-  const target = document.querySelector(CAPTURE_SELECTOR) || document.body;
+  const target = document.querySelector('#capture-root') || document.body;
 
-  // 1) Raster the DOM with a transparent background (so we can composite behind it)
+  // 1) DOM snapshot with transparent background
   const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
-  const domCanvas = await html2canvas(target, {
-    backgroundColor: null,
-    scale
-  });
-  const W = domCanvas.width;
-  const H = domCanvas.height;
+  const domCanvas = await window.html2canvas(target, { backgroundColor: null, scale });
+  const W = domCanvas.width, H = domCanvas.height;
 
-  // 2) Prepare a compositor canvas
+  // 2) compositor
   const canvas = document.createElement('canvas');
-  canvas.width = W;
-  canvas.height = H;
+  canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // 3) Read the SAME CSS variables the page uses (so export == on-screen)
-  const rootStyle = getComputedStyle(document.documentElement);
-  const surface = (rootStyle.getPropertyValue('--theme-background') || rootStyle.getPropertyValue('--surface') || '#ffffff').trim();
-  const duoA    = (rootStyle.getPropertyValue('--duo-a') || '#f784c5').trim();
-  const duoB    = (rootStyle.getPropertyValue('--duo-b') || '#1b602f').trim();
-  const accent  = (rootStyle.getPropertyValue('--accent') || '#000072').trim();
-  const bgVar   = rootStyle.getPropertyValue('--bg-image');
-  const bgOp    = parseFloat(rootStyle.getPropertyValue('--bg-opacity')) || 0.2;
-  const urlMatch = /url\("(.*)"\)/.exec(bgVar);
-  const bgUrl    = urlMatch ? urlMatch[1] : null;
+  // 3) read the same CSS variables the page uses
+  const css = getComputedStyle(document.documentElement);
+  const surface = (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
+  const duoA    = (css.getPropertyValue('--duo-a') || '#f784c5').trim();
+  const duoB    = (css.getPropertyValue('--duo-b') || '#1b602f').trim();
+  const accent  = (css.getPropertyValue('--accent') || '#000072').trim();
+  const bgVar   = css.getPropertyValue('--bg-image');
+  const bgOp    = parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
+  const m       = /url\("(.*)"\)/.exec(bgVar);
+  const bgUrl   = m ? m[1] : null;
 
-  // 4) Base fill with theme surface (ensures text contrast matches your page)
+  // 4) base: theme surface
   ctx.fillStyle = surface;
   ctx.fillRect(0, 0, W, H);
 
-  // Helpers
-  function grayify(context) {
-    const imgData = context.getImageData(0, 0, W, H);
+  // helper: grayscale pass
+  function grayify(){
+    const imgData = ctx.getImageData(0,0,W,H);
     const d = imgData.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const r = d[i], g = d[i + 1], b = d[i + 2];
-      const gy = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
-      d[i] = d[i + 1] = d[i + 2] = gy;
+    for (let i=0;i<d.length;i+=4){
+      const r=d[i], g=d[i+1], b=d[i+2];
+      const gy = Math.round(0.2126*r + 0.7152*g + 0.0722*b);
+      d[i]=d[i+1]=d[i+2]=gy;
     }
-    context.putImageData(imgData, 0, 0);
+    ctx.putImageData(imgData, 0, 0);
   }
 
-  function addDuotoneOverlay() {
-    // Multiply-like duotone + subtle accent, mirrors your CSS overlay
-    const radial = ctx.createRadialGradient(W * 0.2, H * 0.2, 0, W * 0.2, H * 0.2, Math.max(W, H) * 0.6);
-    radial.addColorStop(0, duoA + '66'); // ~40%
-    radial.addColorStop(1, '#0000');
-    ctx.globalCompositeOperation = 'multiply';
-    ctx.fillStyle = radial; ctx.fillRect(0, 0, W, H);
-
-    const lin = ctx.createLinearGradient(0, 0, W, H);
-    lin.addColorStop(0, duoA + '73'); // ~45%
-    lin.addColorStop(1, duoB + '73');
-    ctx.fillStyle = lin; ctx.fillRect(0, 0, W, H);
-
-    const top = ctx.createLinearGradient(0, 0, 0, H);
-    top.addColorStop(0, accent + '1A'); // ~10%
-    top.addColorStop(1, '#0000');
-    ctx.fillStyle = top; ctx.fillRect(0, 0, W, H);
-
-    ctx.globalCompositeOperation = 'source-over';
-  }
-
-  // 5) Draw the same background image (cover), opacity ≈ 0.2, then grayscale
-  if (bgUrl) {
-    await new Promise((resolve, reject) => {
+  // 5) background image (cover) at ~20%, then grayscale
+  if (bgUrl){
+    await new Promise((res, rej)=>{
       const img = new Image();
-      img.crossOrigin = 'anonymous'; // harmless if same-origin; enables canvas export with CDNs that send CORS headers
-      img.onload = () => {
-        // cover fit
-        const iw = img.naturalWidth, ih = img.naturalHeight;
-        const ir = iw / ih, cr = W / H;
-        let dw = W, dh = H;
-        if (ir > cr) { dh = H; dw = dh * ir; } else { dw = W; dh = dw / ir; }
-        const dx = (W - dw) / 2, dy = (H - dh) / 2;
+      img.crossOrigin = 'anonymous'; // OK for same-origin; needs CORS headers if CDN
+      img.onload = ()=>{
+        const iw=img.naturalWidth, ih=img.naturalHeight;
+        const ir=iw/ih, cr=W/H;
+        let dw=W, dh=H;
+        if (ir>cr){ dh=H; dw=dh*ir; } else { dw=W; dh=dw/ir; }
+        const dx=(W-dw)/2, dy=(H-dh)/2;
 
         ctx.save();
-        ctx.globalAlpha = bgOp;        // ~0.2
+        ctx.globalAlpha = bgOp;
         ctx.drawImage(img, dx, dy, dw, dh);
-        grayify(ctx);                   // match the page’s grayscale filter
+        grayify();
         ctx.restore();
-        resolve();
+        res();
       };
-      img.onerror = reject;
+      img.onerror = rej;
       img.src = bgUrl;
     });
   }
 
-  // 6) Add the same duotone + accent overlay your CSS applies
-  addDuotoneOverlay();
+  // 6) duotone + accent overlay (multiply) — mirrors body::after
+  (function addDuotone(){
+    const radial = ctx.createRadialGradient(W*0.2, H*0.2, 0, W*0.2, H*0.2, Math.max(W,H)*0.6);
+    radial.addColorStop(0, duoA + '66'); // ~40%
+    radial.addColorStop(1, '#0000');
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = radial; ctx.fillRect(0,0,W,H);
 
-  // 7) Paint the DOM snapshot on top (what users see)
+    const lin = ctx.createLinearGradient(0,0,W,H);
+    lin.addColorStop(0, duoA + '73');   // ~45%
+    lin.addColorStop(1, duoB + '73');
+    ctx.fillStyle = lin; ctx.fillRect(0,0,W,H);
+
+    const top = ctx.createLinearGradient(0,0,0,H);
+    top.addColorStop(0, accent + '1A'); // ~10%
+    top.addColorStop(1, '#0000');
+    ctx.fillStyle = top; ctx.fillRect(0,0,W,H);
+
+    ctx.globalCompositeOperation = 'source-over';
+  })();
+
+  // 7) DOM on top (text/UI)
   ctx.drawImage(domCanvas, 0, 0);
 
-  // 8) Keep your existing watermark strip if you draw one later in this function
-  // (If your code already adds the “Got a nice answer? …” strip, leave that code after this line.)
-
-  // 9) Return blob + file for share / copy / download flows (unchanged API)
+  // 8) return blob + file for share/copy/download code you already have
   const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
-  const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
+  const file = new File([blob], 'icebreaker.png', { type:'image/png' });
   return { blob, file };
 }
 
