@@ -1,9 +1,8 @@
 <!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
 <script>
 (function () {
-  // --- Main Image Generator ---
+  // --- Main Image Generator (no changes needed here) ---
   async function generateShareImage() {
-    // --- (Canvas setup and background/duotone generation code remains the same) ---
     const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
@@ -53,29 +52,14 @@
     radial.addColorStop(0, `${duoA}66`); radial.addColorStop(1, '#0000');
     ctx.fillStyle = radial; ctx.fillRect(0, 0, width, height);
     const lin = ctx.createLinearGradient(0, 0, width, height);
-    lin.addColorStop(0, `${duA}73`); lin.addColorStop(1, `${duoB}73`);
+    lin.addColorStop(0, `${duoA}73`); lin.addColorStop(1, `${duoB}73`);
     ctx.fillStyle = lin; ctx.fillRect(0, 0, width, height);
     const top = ctx.createLinearGradient(0, 0, 0, height);
     top.addColorStop(0, `${accent}1A`); top.addColorStop(1, '#0000');
     ctx.fillStyle = top; ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = 'source-over';
-    
-    // --- Draw Text ---
     const questionText = (document.getElementById('question-display')?.innerText || '').trim();
-
-    // UPDATED: This section now specifically finds and filters the footer text
-    const footerContainer = document.querySelector('.footer-col-3');
-    let footerLines = [];
-    if (footerContainer) {
-        footerContainer.querySelectorAll('li').forEach(li => {
-            const text = (li.innerText || '').trim();
-            // This condition explicitly ignores any line containing "KLVN"
-            if (text && !text.toLowerCase().includes('klvn')) {
-                footerLines.push(text);
-            }
-        });
-    }
-
+    const footerLines = Array.from(document.querySelector('footer').querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean).filter(text => !['Download image', 'Copy image', 'Copy text'].includes(text));
     const padding = Math.round(Math.min(width, height) * 0.05);
     const maxTextWidth = Math.round(width * 0.82);
     const wrapLines = (ctx, text, maxWidth) => {
@@ -112,7 +96,7 @@
     return { blob, file: new File([blob], 'icebreaker.png', { type: 'image/png' }) };
   }
 
-  // --- Action Functions ---
+  // --- NEW Action Functions ---
 
   async function doShare() {
     const shareBtn = document.getElementById('post-link');
@@ -139,14 +123,6 @@
         previewImg.src = imageUrl;
         modal.style.display = 'flex';
 
-        const closeModal = () => {
-            modal.style.display = 'none';
-            URL.revokeObjectURL(imageUrl);
-            previewImg.src = '';
-            confirmBtn.onclick = null;
-            cancelBtn.onclick = null;
-        };
-
         confirmBtn.onclick = async () => {
             try {
                 await navigator.share({ files: [file], title: 'Icebreaker' });
@@ -156,13 +132,20 @@
                 closeModal();
             }
         };
-        cancelBtn.onclick = closeModal;
+        cancelBtn.onclick = () => closeModal();
         
+        function closeModal() {
+            modal.style.display = 'none';
+            URL.revokeObjectURL(imageUrl);
+            previewImg.src = '';
+            confirmBtn.onclick = null; // Clean up handlers
+            cancelBtn.onclick = null;
+        }
+
     } catch (error) {
         console.error('Image generation failed:', error);
         alert('Could not generate the image. Please try again.');
     } finally {
-        // This block ensures the button always returns to its original state
         if (shareBtn) {
             shareBtn.innerText = originalText;
             shareBtn.style.pointerEvents = 'auto';
@@ -221,7 +204,7 @@
 })();
 
 (function() {
-  // --- Background randomizer script (no changes) ---
+  // --- This is the second script you provided, which sets the random background. It works with the above script. ---
   const IMAGES = [ 'src/images/bg1.jpg', 'src/images/bg2.webp', 'src/images/bg3.webp', 'src/images/bg4.jpg', 'src/images/bg5.webp', 'src/images/bg6.webp', 'src/images/bg7.jpeg' ];
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
