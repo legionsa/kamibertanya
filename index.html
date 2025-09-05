@@ -3,6 +3,7 @@
 (function () {
   // --- Main Image Generator ---
   async function generateShareImage() {
+    // This function generates the image with the correct background and no "KLVN" text.
     const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
@@ -123,7 +124,7 @@
             previewImg.src = '';
             confirmBtn.removeEventListener('click', confirmHandler);
             cancelBtn.removeEventListener('click', cancelHandler);
-            resolve();
+            resolve(); // Signal that the modal flow is complete
         };
 
         const confirmHandler = async () => {
@@ -135,6 +136,7 @@
                 closeModal();
             }
         };
+
         const cancelHandler = () => closeModal();
 
         confirmBtn.addEventListener('click', confirmHandler);
@@ -144,17 +146,11 @@
   
   async function doShare() {
     const shareBtn = document.getElementById('post-link');
-    if (!shareBtn) {
-        alert('Error: Could not find the share button with id="post-link".');
-        return;
+    const originalText = shareBtn ? shareBtn.innerText : '';
+    if (shareBtn) {
+        shareBtn.innerText = 'Generating...';
+        shareBtn.style.pointerEvents = 'none';
     }
-    const originalText = shareBtn.innerText;
-    
-    // --- DIAGNOSTIC ALERT 1 ---
-    alert('Step 1: Share process started.');
-    
-    shareBtn.innerText = 'Generating...';
-    shareBtn.style.pointerEvents = 'none';
 
     try {
         const { file, blob } = await generateShareImage();
@@ -162,27 +158,22 @@
         if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
             alert("Web Share is not supported here. The image will be downloaded instead.");
             await downloadImage(blob);
-            return;
+            return; // Exit, but 'finally' will still run
         }
         
-        // --- DIAGNOSTIC ALERT 2 ---
-        alert('Step 2: Image generated. Showing preview modal.');
+        // Show the modal and WAIT for it to be closed
         await showSharePreview(file, blob);
-        // --- DIAGNOSTIC ALERT 3 ---
-        alert('Step 3: Share preview has been closed.');
 
     } catch (error) {
         console.error('An error occurred:', error);
-        alert('An error occurred during the process. Check the console for details.');
+        alert('Could not complete the share action. Please try again.');
     } finally {
-        // --- DIAGNOSTIC ALERT 4 ---
-        alert('Step 4: Restoring the share button now.');
-        
-        shareBtn.innerText = originalText;
-        shareBtn.style.pointerEvents = 'auto';
-
-        // --- DIAGNOSTIC ALERT 5 ---
-        alert('Step 5: The button should now be visible and clickable again.');
+        // THIS IS THE GUARANTEE: This block always runs after the 'try' block,
+        // ensuring the button is restored no matter what happens.
+        if (shareBtn) {
+            shareBtn.innerText = originalText;
+            shareBtn.style.pointerEvents = 'auto';
+        }
     }
   }
 
