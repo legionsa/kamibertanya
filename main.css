@@ -43,3 +43,50 @@ body::after{
   pointer-events:none;
 }
 body.themed{transition:background-color .75s ease}main{align-items:center;flex:1;justify-content:center}footer,main{display:flex}footer{flex-direction:column;font-size:.75rem;padding:1rem}.footer-col-3{align-items:center}.footer-col-3,.footer-col-3>ul{display:flex;justify-content:space-between}.footer-col-3>ul{flex-direction:column;flex-grow:1}h2#question-display{font-display:swap;font-family:var(--theme-font),-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;font-size:1.9rem;margin:0 .25rem;padding:1rem;text-align:center}html.font-resizing h2#question-display{position:absolute;visibility:hidden}button#reload-button{border:1px solid var(--theme-highlight);font-family:arial;font-size:1rem;margin:0 auto 1rem;max-width:20rem;padding:1rem}button#change-theme-button{border:none;margin-left:1rem;min-width:4.4rem}button{fill:var(--theme-highlight);appearance:none;background:transparent;border-radius:2.2rem;color:var(--theme-highlight);cursor:pointer;transition:background-color .1s ease}button:hover{fill:var(--theme-background);background-color:var(--theme-highlight);color:var(--theme-background)}ul{list-style-type:none;margin:0;padding:0}a{color:var(--theme-highlight);text-decoration:none}a:hover{text-decoration:underline}a:visited{color:var(--theme-highlight)}@media (min-width:640px){h2#question-display{font-size:3rem;margin:auto;max-width:80%;padding:0}button#reload-button{font-size:1.3rem;padding:1rem 1.5rem}footer{font-size:1rem}}@media (min-width:900px){li{margin-top:1rem}li:first-child{margin-top:0}footer{align-items:flex-end;flex-direction:row}footer>*{width:30%}.footer-col-1{order:1}.footer-col-2{order:2}.footer-col-3{justify-content:flex-end;order:3}.footer-col-3>ul{display:unset;text-align:right}button#reload-button{margin-bottom:0}}@media (min-width:1200px){h2#question-display{font-size:4rem}footer{font-size:1.2rem;padding:2rem}button#reload-button{font-size:1.3rem;max-width:24rem;padding:1.2rem 2rem}}
+/* Brand outline look (same for both buttons) */
+.btn-outline--brand {
+  /* use your brand pink (duotone A) for the border/text */
+  color: var(--btn-outline-color, color-mix(in oklab, var(--duo-a) 85%, #ffffff 0%));
+  border-color: currentColor;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Make both pills the same height + radius as the left button */
+.footer-actions .btn-outline {
+  height: 56px;                /* match left pill height */
+  border-radius: 9999px;       /* fully rounded */
+  padding: 0 24px;             /* comfy horizontal padding */
+  line-height: 56px;           /* vertically center text if needed */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-width: 2px;           /* match the thickness from the left button */
+}
+
+/* Don't let buttons stretch weirdly */
+.footer-actions .btn-outline { 
+  flex: 0 0 auto;              /* prevents stretching */
+}
+
+/* Icon-only share button: same height, compact width */
+.btn-icon {
+  width: 56px;                 /* same as height for a perfect circle pill end */
+  padding: 0;                  /* icon-only */
+}
+
+/* Ensure the SVG reads the button color and is visible enough */
+#share-button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;          /* inherits pink from the button */
+}
+
+/* If any previous rules were giving the share button a black-ish border/shadow,
+   nuke them here (important to override library styles). */
+#share-button {
+  box-shadow: none !important;
+  border-color: currentColor !important;
+  background: transparent !important;
+}
