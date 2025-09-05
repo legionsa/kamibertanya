@@ -414,7 +414,6 @@
     * Kapan riset publik membongkar kebijakan buruk?
     * Apa yang menahan reformasi birokrasi digital?
     * Mengapa layanan publik jam 9–4 di era 24/7?
-    * Kapan antrian online berhenti jadi lotre?
     * Apa yang rakyat dapat dari pajak digital?
     * Mengapa platform dibiarkan monopoli data warga?
     * Kapan hak privasi dijamin setegas hak milik?
