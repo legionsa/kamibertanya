@@ -259,7 +259,6 @@
     * Bagaimana cara membangun ekonomi yang inklusif dan berkelanjutan?
     * Mengapa reformasi mental menjadi sangat krusial untuk kemajuan bangsa?
     * Apakah sistem pemerintahan saat ini masih relevan dengan tuntutan zaman?
-    * Bagaimana cara memastikan kemajuan teknologi tidak memperlebar kesenjangan?
     * Mengapa perlindungan lingkungan hidup menjadi investasi jangka panjang?
     * Apakah nilai-nilai pancasila masih relevan sebagai pandangan hidup bangsa?
     * Bagaimana cara membangun identitas nasional yang kuat di era globalisasi?
@@ -271,7 +270,6 @@
     * Bagaimana cara membangun kemitraan strategis yang menguntungkan?
     * Mengapa inovasi dan kreativitas menjadi modal utama di abad 21?
     * Apakah sistem pendidikan sudah cukup mempersiapkan generasi masa depan?
-    * Bagaimana cara memastikan kemajuan teknologi tidak mengancam nilai-nilai luhur?
     * Mengapa perlindungan budaya dan warisan menjadi tanggung jawab bersama?
     * Apakah Indonesia sudah siap menghadapi perubahan iklim global?
     * Bagaimana cara membangun masa depan yang lebih baik bagi semua anak bangsa?
