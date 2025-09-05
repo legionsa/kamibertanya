@@ -19,109 +19,129 @@ function getComputedBgColor(el) {
   return bg;
 }
 
-// === REPLACE your existing captureShareImage() with this version ===
+// EXACT WYSIWYG: theme surface + background image @ ~20% (grayscale) + duotone + accent + DOM
 async function captureShareImage() {
   const target = document.querySelector('#capture-root') || document.body;
 
-  // Helper: find the image that the homepage is actually using
-  function findCurrentBackgroundUrl() {
-    // 1) Look for a real element with a background-image set (closest first)
-    const candidates = [target, ...target.querySelectorAll('*')];
-    for (const el of candidates) {
-      const cs = getComputedStyle(el);
-      const bg = cs.backgroundImage || '';
-      if (bg && bg.includes('url(')) return bg; // e.g. url(".../photo.jpg")
-    }
-    // 2) Fallback to global CSS var if you use one (won't break if absent)
-    const rootBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-image');
-    if (rootBg && rootBg.includes('url(')) return rootBg;
+  // 1) Raster the DOM with a transparent background (so we can composite behind it)
+  const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
+  const domCanvas = await window.html2canvas(target, {
+    backgroundColor: null,
+    scale
+  });
+  const W = domCanvas.width;
+  const H = domCanvas.height;
 
-    // 3) Last resort: body's background-image (often none)
-    const bodyBg = getComputedStyle(document.body).backgroundImage;
-    return bodyBg && bodyBg.includes('url(') ? bodyBg : 'none';
+  // 2) Prepare compositor canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // 3) Read the SAME CSS variables your page uses (source of truth)
+  const css = getComputedStyle(document.documentElement);
+
+  // Theme surface (fall back to dark)
+  const surface =
+    (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
+
+  // Background image URL (from --bg-image), robust URL extractor
+  const bgVar = css.getPropertyValue('--bg-image') || '';
+  let bgUrl = null;
+  {
+    // handles url("…"), url('…'), url(…)
+    const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
+    if (m && m[1]) bgUrl = m[1];
+  }
+  const bgOpacity =
+    parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
+
+  // Duotone + accent
+  const duoA = (css.getPropertyValue('--duo-a') || '#f784c5').trim();
+  const duoB = (css.getPropertyValue('--duo-b') || '#1b602f').trim();
+  const accent = (css.getPropertyValue('--accent') || '#000072').trim();
+
+  // 4) Base fill with the theme surface so text contrast matches the page
+  ctx.fillStyle = surface;
+  ctx.fillRect(0, 0, W, H);
+
+  // Helper: grayscale pass (match your CSS grayscale)
+  function grayify() {
+    const imgData = ctx.getImageData(0, 0, W, H);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      const gy = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+      d[i] = d[i + 1] = d[i + 2] = gy;
+    }
+    ctx.putImageData(imgData, 0, 0);
   }
 
-  // Helper: read your duotone colors (fallback to the ones you asked for)
-  const root = getComputedStyle(document.documentElement);
-  const duoA   = (root.getPropertyValue('--duo-a')   || '#f784c5').trim();
-  const duoB   = (root.getPropertyValue('--duo-b')   || '#1b602f').trim();
-  const accent = (root.getPropertyValue('--accent')  || '#000072').trim();
-  const bgOpacity = parseFloat(root.getPropertyValue('--bg-opacity')) || 0.2;
-  const surface   = (root.getPropertyValue('--theme-background') || '#0f0f11').trim();
+  // 5) Draw the same background image (cover) @ ~20% and then grayscale
+  if (bgUrl) {
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      // keep this even if same-origin; prevents a tainted canvas if you move to a CDN later
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        // cover sizing
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const ir = iw / ih, cr = W / H;
+        let dw = W, dh = H;
+        if (ir > cr) { dh = H; dw = dh * ir; } else { dw = W; dh = dw / ir; }
+        const dx = (W - dw) / 2, dy = (H - dh) / 2;
 
-  // 1) Create two temporary layers INSIDE the capture root so html2canvas sees them
-  const backdrop = document.createElement('div');
-  const overlay  = document.createElement('div');
+        ctx.save();
+        ctx.globalAlpha = bgOpacity; // ~0.2
+        ctx.drawImage(img, dx, dy, dw, dh);
+        grayify();                   // mimic CSS filter: grayscale(100%)
+        ctx.restore();
 
-  // common sizing
-  Object.assign(backdrop.style, {
-    position: 'absolute',
-    inset: '0',
-    pointerEvents: 'none',
-    zIndex: '0',
-  });
-  Object.assign(overlay.style, {
-    position: 'absolute',
-    inset: '0',
-    pointerEvents: 'none',
-    zIndex: '1',
-    mixBlendMode: 'multiply',
-  });
+        resolve();
+      };
+      img.onerror = reject;
+      img.src = bgUrl;
+    });
+  }
 
-  // ensure target is a positioned stacking context so our layers sit behind content
-  const prevPos = getComputedStyle(target).position;
-  if (prevPos === 'static') target.style.position = 'relative';
+  // 6) Rebuild the duotone + accent overlay (like body::after)
+  (function addDuotone() {
+    // radial glow
+    const radial = ctx.createRadialGradient(
+      W * 0.2, H * 0.2, 0,
+      W * 0.2, H * 0.2, Math.max(W, H) * 0.6
+    );
+    radial.addColorStop(0, duoA + '66'); // ~40%
+    radial.addColorStop(1, '#0000');
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = radial;
+    ctx.fillRect(0, 0, W, H);
 
-  // Fill target’s background color first (to match your page’s surface)
-  const prevBg = target.style.background;
-  target.style.background = surface;
+    // diagonal sweep
+    const lin = ctx.createLinearGradient(0, 0, W, H);
+    lin.addColorStop(0, duoA + '73');    // ~45%
+    lin.addColorStop(1, duoB + '73');
+    ctx.fillStyle = lin;
+    ctx.fillRect(0, 0, W, H);
 
-  // BACKDROP: same photo the page is using, 20% + grayscale
-  const bgImageCss = findCurrentBackgroundUrl(); // ex: url("…/photo.jpg") or "none"
-  Object.assign(backdrop.style, {
-    backgroundImage: bgImageCss,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    opacity: String(bgOpacity),
-    filter: 'grayscale(100%) contrast(105%)',
-  });
+    // top accent
+    const top = ctx.createLinearGradient(0, 0, 0, H);
+    top.addColorStop(0, accent + '1A');  // ~10%
+    top.addColorStop(1, '#0000');
+    ctx.fillStyle = top;
+    ctx.fillRect(0, 0, W, H);
 
-  // OVERLAY: duotone + accent (match your CSS)
-  overlay.style.background =
-    `radial-gradient(circle at 20% 20%, ${duoA}66, transparent 60%),` + // ~40%
-    `linear-gradient(135deg, ${duoA}73 0%, ${duoB}73 100%),` +          // ~45%
-    `linear-gradient(to bottom, ${accent}1A, transparent)`;             // ~10%
+    ctx.globalCompositeOperation = 'source-over';
+  })();
 
-  // Insert as first children so your real content sits above (z-index 2+)
-  target.prepend(overlay);
-  target.prepend(backdrop);
+  // 7) Put the DOM snapshot on top (what users actually see)
+  ctx.drawImage(domCanvas, 0, 0);
 
-  // 2) Snapshot the DOM with the temporary layers
-  const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
-  const canvas = await window.html2canvas(target, {
-    backgroundColor: null, // we've supplied our own layers
-    scale,
-    // Increase odds pseudo/fixed content render properly by cloning as-is
-    onclone: (clonedDoc) => {
-      // ensure the clone target has the same absolute layers
-      const cloneTarget = clonedDoc.querySelector('#capture-root') || clonedDoc.body;
-      cloneTarget.style.background = surface;
-    }
-  });
-
-  // 3) Cleanup: remove temporary layers and restore inline styles
-  backdrop.remove();
-  overlay.remove();
-  target.style.background = prevBg;
-  if (prevPos === 'static') target.style.position = '';
-
-  // 4) Return blob + file for your share/copy/download pipelines
+  // 8) Return as Blob/File (your share/copy/download can keep using this)
   const blob = await new Promise((res) => canvas.toBlob(res, 'image/png', 1));
   const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
   return { blob, file };
 }
-
 
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
