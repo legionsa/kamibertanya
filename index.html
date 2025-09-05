@@ -3,7 +3,6 @@
 (function () {
   // --- Main Image Generator ---
   async function generateShareImage() {
-    // --- (Canvas setup and background/duotone generation code remains the same) ---
     const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
@@ -59,23 +58,17 @@
     top.addColorStop(0, `${accent}1A`); top.addColorStop(1, '#0000');
     ctx.fillStyle = top; ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = 'source-over';
-    
-    // --- Draw Text ---
     const questionText = (document.getElementById('question-display')?.innerText || '').trim();
-
-    // UPDATED: This section now specifically finds and filters the footer text
     const footerContainer = document.querySelector('.footer-col-3');
     let footerLines = [];
     if (footerContainer) {
         footerContainer.querySelectorAll('li').forEach(li => {
             const text = (li.innerText || '').trim();
-            // This condition explicitly ignores any line containing "KLVN"
             if (text && !text.toLowerCase().includes('klvn')) {
                 footerLines.push(text);
             }
         });
     }
-
     const padding = Math.round(Math.min(width, height) * 0.05);
     const maxTextWidth = Math.round(width * 0.82);
     const wrapLines = (ctx, text, maxWidth) => {
@@ -112,8 +105,46 @@
     return { blob, file: new File([blob], 'icebreaker.png', { type: 'image/png' }) };
   }
 
-  // --- Action Functions (with share preview modal logic) ---
+  // --- Action Functions ---
 
+  function showSharePreview(file, blob) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('share-preview-modal');
+        const previewImg = document.getElementById('share-preview-image');
+        const confirmBtn = document.getElementById('share-confirm-button');
+        const cancelBtn = document.getElementById('share-cancel-button');
+        const imageUrl = URL.createObjectURL(blob);
+        previewImg.src = imageUrl;
+        modal.style.display = 'flex';
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            URL.revokeObjectURL(imageUrl);
+            previewImg.src = '';
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
+            resolve(); // Resolve the promise to signal the modal is closed
+        };
+
+        const confirmHandler = async () => {
+            try {
+                await navigator.share({ files: [file], title: 'Icebreaker' });
+            } catch (err) {
+                console.warn("Share was cancelled or failed.", err);
+            } finally {
+                closeModal();
+            }
+        };
+
+        const cancelHandler = () => {
+            closeModal();
+        };
+
+        confirmBtn.addEventListener('click', confirmHandler);
+        cancelBtn.addEventListener('click', cancelHandler);
+    });
+  }
+  
   async function doShare() {
     const shareBtn = document.getElementById('post-link');
     const originalText = shareBtn ? shareBtn.innerText : '';
@@ -130,38 +161,15 @@
             await downloadImage(blob);
             return;
         }
-
-        const modal = document.getElementById('share-preview-modal');
-        const previewImg = document.getElementById('share-preview-image');
-        const confirmBtn = document.getElementById('share-confirm-button');
-        const cancelBtn = document.getElementById('share-cancel-button');
-        const imageUrl = URL.createObjectURL(blob);
-        previewImg.src = imageUrl;
-        modal.style.display = 'flex';
-
-        const closeModal = () => {
-            modal.style.display = 'none';
-            URL.revokeObjectURL(imageUrl);
-            previewImg.src = '';
-            confirmBtn.onclick = null;
-            cancelBtn.onclick = null;
-        };
-
-        confirmBtn.onclick = async () => {
-            try {
-                await navigator.share({ files: [file], title: 'Icebreaker' });
-            } catch (err) {
-                console.warn("Share was cancelled or failed.", err);
-            } finally {
-                closeModal();
-            }
-        };
-        cancelBtn.onclick = closeModal;
         
+        // Show the modal and wait for the user to finish
+        await showSharePreview(file, blob);
+
     } catch (error) {
-        console.error('Image generation failed:', error);
-        alert('Could not generate the image. Please try again.');
+        console.error('An error occurred:', error);
+        alert('Could not complete the share action. Please try again.');
     } finally {
+        // This now runs AFTER the modal is closed, reliably restoring the button
         if (shareBtn) {
             shareBtn.innerText = originalText;
             shareBtn.style.pointerEvents = 'auto';
