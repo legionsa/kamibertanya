@@ -1,9 +1,9 @@
 <!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
 <script>
 (function () {
-  // --- Main Image Generator (from previous step) ---
+  // --- Main Image Generator ---
   async function generateShareImage() {
-    const getTargetDimensions = () => /Android|iPhone|iPad|iPod|iPod Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
+    const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
     canvas.width = width;
@@ -66,7 +66,23 @@
 
     // 2. Draw text
     const questionText = (document.getElementById('question-display')?.innerText || '').trim();
-    const footerLines = Array.from(document.querySelector('footer').querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean);
+
+    // MODIFIED: Only include specific footer elements or filter unwanted text
+    const rawFooterElements = document.querySelector('footer')?.querySelectorAll('p, a');
+    let footerLines = [];
+    if (rawFooterElements) {
+        rawFooterElements.forEach(el => {
+            const text = (el.innerText || '').trim();
+            // Filter out specific unwanted texts
+            if (text && !['Download image', 'Copy image', 'KLVN'].includes(text)) {
+                footerLines.push(text);
+            }
+        });
+    }
+    // If 'KLVN' is part of a longer string, you might need more complex filtering
+    footerLines = footerLines.filter(line => !line.includes('KLVN'));
+
+
     const padding = Math.round(Math.min(width, height) * 0.05);
     const maxTextWidth = Math.round(width * 0.82);
     const wrapLines = (ctx, text, maxWidth) => {
@@ -110,19 +126,39 @@
   // --- Action Functions ---
 
   async function doShare() {
+    const shareBtn = document.getElementById('post-link');
+    const originalText = shareBtn ? shareBtn.innerText : '';
+    if (shareBtn) {
+        shareBtn.innerText = 'Generating...';
+        shareBtn.style.pointerEvents = 'none'; // Prevent double clicks
+    }
+    
     try {
-      const { file } = await generateShareImage();
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Icebreaker' });
-      } else {
-        alert("Web Share is not supported by your browser. Try downloading the image instead.");
-      }
-    } catch (e) { console.error(e); alert('Sharing failed.'); }
+        const { file, blob } = await generateShareImage();
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'Icebreaker' });
+        } else {
+            alert("Web Share is not supported here. The image will be downloaded instead.");
+            await downloadImage(blob);
+        }
+    } catch (error) {
+        console.error('Sharing failed:', error);
+        alert('Sharing failed. The image will be downloaded so you can share it manually.');
+        const { blob } = await generateShareImage(); // Re-generate for download
+        await downloadImage(blob);
+    } finally {
+        if (shareBtn) {
+            shareBtn.innerText = originalText;
+            shareBtn.style.pointerEvents = 'auto';
+        }
+    }
   }
 
-  async function downloadImage() {
+  async function downloadImage(blob = null) {
     try {
-        const { blob } = await generateShareImage();
+        if (!blob) {
+            blob = (await generateShareImage()).blob;
+        }
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -156,8 +192,18 @@
   function copyText() {
     try {
         const text = document.getElementById('question-display')?.innerText || '';
-        navigator.clipboard.writeText(text);
-        alert('Text copied to clipboard!');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text);
+            alert('Text copied to clipboard!');
+        } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Text copied to clipboard!');
+        }
     } catch (e) {
         console.error('Copy text failed:', e);
         alert('Could not copy text.');
