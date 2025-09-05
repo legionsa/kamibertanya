@@ -19,130 +19,127 @@ function getComputedBgColor(el) {
   return bg;
 }
 
-// EXACT WYSIWYG capture: bg image (20% grayscale) + duotone + accent + DOM + watermarks
 async function captureShareImage() {
-  const CAPTURE_SELECTOR = '#app, main, body'; // keep whatever you already have
   const target = document.querySelector(CAPTURE_SELECTOR) || document.body;
+  const scale = window.devicePixelRatio > 1 ? 2 : 1;
 
-  // 1) Raster the DOM (transparent bg)
-  const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
+  // 1) Raster the DOM first (transparent bg)
   const domCanvas = await html2canvas(target, {
-    backgroundColor: null,     // IMPORTANT: no solid bg
+    backgroundColor: null,
     scale
   });
   const W = domCanvas.width;
   const H = domCanvas.height;
 
-  // 2) Prepare a compositor canvas
+  // 2) Create a compositing canvas
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // 3) Read the same CSS variables the page uses
-  const css = getComputedStyle(document.documentElement);
-  const surface = (css.getPropertyValue('--theme-background') || css.getPropertyValue('--surface') || '#ffffff').trim();
-  const duoA    = (css.getPropertyValue('--duo-a') || '#f784c5').trim();
-  const duoB    = (css.getPropertyValue('--duo-b') || '#1b602f').trim();
-  const accent  = (css.getPropertyValue('--accent') || '#000072').trim();
+  // Helpers to read CSS vars from :root
+  const root = document.documentElement;
+  const css = getComputedStyle(root);
+  const surface = css.getPropertyValue('--theme-background').trim() || '#ffffff';
+  const duoA    = css.getPropertyValue('--duo-a').trim() || '#f784c5';
+  const duoB    = css.getPropertyValue('--duo-b').trim() || '#1b602f';
+  const accent  = css.getPropertyValue('--accent').trim() || '#000072';
   const bgVar   = css.getPropertyValue('--bg-image');
-  const bgOp    = parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
+  const bgOpacity = parseFloat(css.getPropertyValue('--bg-opacity')) || 0.2;
   const urlMatch = /url\("(.*)"\)/.exec(bgVar);
   const bgUrl    = urlMatch ? urlMatch[1] : null;
 
-  // 4) Base: theme surface (so text contrast matches)
+  // Base: fill with theme surface, so text contrast matches on page
   ctx.fillStyle = surface;
   ctx.fillRect(0, 0, W, H);
 
-  // helpers
-  function hex(n){ return n.toString(16).padStart(2,'0'); }
-  function grayify(canvasCtx){
-    const imgData = canvasCtx.getImageData(0, 0, W, H);
-    const d = imgData.data;
-    for (let i=0; i<d.length; i+=4){
-      const r=d[i], g=d[i+1], b=d[i+2];
-      const gY = Math.round(0.2126*r + 0.7152*g + 0.0722*b);
-      d[i]=d[i+1]=d[i+2]=gY;
-    }
-    canvasCtx.putImageData(imgData, 0, 0);
-  }
-  function addDuotone(){
-    // multiply-like look, same shape as CSS layer
-    const radial = ctx.createRadialGradient(W*0.2, H*0.2, 0, W*0.2, H*0.2, Math.max(W,H)*0.6);
-    radial.addColorStop(0, duoA + '66'); // ~40%
-    radial.addColorStop(1, '#0000');
-    ctx.globalCompositeOperation = 'multiply';
-    ctx.fillStyle = radial; ctx.fillRect(0,0,W,H);
-
-    const lin = ctx.createLinearGradient(0,0,W,H);
-    lin.addColorStop(0, duoA + '73'); // ~45%
-    lin.addColorStop(1, duoB + '73');
-    ctx.fillStyle = lin; ctx.fillRect(0,0,W,H);
-
-    const top = ctx.createLinearGradient(0,0,0,H);
-    top.addColorStop(0, accent + '1A'); // ~10%
-    top.addColorStop(1, '#0000');
-    ctx.fillStyle = top; ctx.fillRect(0,0,W,H);
-
-    ctx.globalCompositeOperation = 'source-over';
-  }
-
-  // 5) Draw background image (cover) at ~20%, then grayscale
-  if (bgUrl) {
-    await new Promise((resolve, reject)=>{
-      const img = new Image();
-      img.crossOrigin = 'anonymous';  // safe if same-origin or proper headers
-      img.onload = ()=>{
-        const iw=img.naturalWidth, ih=img.naturalHeight;
-        const ir=iw/ih, cr=W/H;
-        let dw=W, dh=H;
-        if (ir>cr){ dh=H; dw=dh*ir; } else { dw=W; dh=dw/ir; }
-        const dx=(W-dw)/2, dy=(H-dh)/2;
-
-        ctx.save();
-        ctx.globalAlpha = bgOp;  // ~0.2
-        ctx.drawImage(img, dx, dy, dw, dh);
-        grayify(ctx);            // desaturate to match page
-        ctx.restore();
-
-        resolve();
-      };
-      img.onerror = reject;
-      img.src = bgUrl;
+  // 3) Draw background image (cover), grayscale, ~20%
+  async function drawBg() {
+    if (!bgUrl) return;
+    const img = await new Promise((res, rej) => {
+      const im = new Image();
+      im.crossOrigin = "anonymous";
+      im.onload = () => res(im);
+      im.onerror = rej;
+      im.src = bgUrl;
     });
+
+    // cover
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const ir = iw / ih, cr = W / H;
+    let dw = W, dh = H;
+    if (ir > cr) { dh = H; dw = dh * ir; } else { dw = W; dh = dw / ir; }
+    const dx = (W - dw) / 2, dy = (H - dh) / 2;
+
+    ctx.save();
+    ctx.globalAlpha = bgOpacity;
+    ctx.drawImage(img, dx, dy, dw, dh);
+
+    // grayscale pass
+    const imgData = ctx.getImageData(0, 0, W, H);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      const gray = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+      data[i] = data[i + 1] = data[i + 2] = gray;
+    }
+    ctx.putImageData(imgData, 0, 0);
+    ctx.restore();
   }
 
-  // 6) Duotone + accent overlays to match page
-  addDuotone();
+  // 4) Draw duotone + accent overlays (multiply feel)
+  function drawDuotone() {
+    // radial
+    const radial = ctx.createRadialGradient(W * 0.2, H * 0.2, 0, W * 0.2, H * 0.2, Math.max(W, H) * 0.6);
+    radial.addColorStop(0, duoA + "66"); // ~40%
+    radial.addColorStop(1, "#0000");
+    ctx.globalCompositeOperation = "multiply";
+    ctx.fillStyle = radial;
+    ctx.fillRect(0, 0, W, H);
 
-  // 7) DOM on top (what users actually see)
+    // diagonal sweep
+    const lin = ctx.createLinearGradient(0, 0, W, H);
+    lin.addColorStop(0, duoA + "73"); // ~45%
+    lin.addColorStop(1, duoB + "73");
+    ctx.fillStyle = lin;
+    ctx.fillRect(0, 0, W, H);
+
+    // accent top
+    const top = ctx.createLinearGradient(0, 0, 0, H);
+    top.addColorStop(0, accent + "1A"); // ~10%
+    top.addColorStop(1, "#0000");
+    ctx.fillStyle = top;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  // 5) Compose
+  await drawBg();
+  drawDuotone();
   ctx.drawImage(domCanvas, 0, 0);
 
-  // 8) (Keep your existing watermarking, if any)
-  // If you already draw the white strip + two watermark lines, keep it here.
-  // Example (uses your existing WATERMARK_1/WATERMARK_2 constants if present):
-  if (typeof WATERMARK_1 !== 'undefined' && typeof WATERMARK_2 !== 'undefined') {
-    const padding = Math.round(16 * scale);
-    const lineGap = Math.round(8 * scale);
-    const fontSmall = Math.max(12 * scale, 14);
-    const fontTiny  = Math.max(10 * scale, 12);
+  // 6) Watermarks (reuse your existing logic)
+  const padding = Math.round(16 * scale);
+  const lineGap = Math.round(8 * scale);
+  const fontSmall = Math.max(12 * scale, 14);
+  const fontTiny  = Math.max(10 * scale, 12);
 
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    const stripHeight = padding * 2 + fontSmall + lineGap + fontTiny;
-    ctx.fillRect(0, H - stripHeight, W, stripHeight);
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  const stripHeight = padding * 2 + fontSmall + lineGap + fontTiny;
+  ctx.fillRect(0, H - stripHeight, W, stripHeight);
 
-    ctx.fillStyle = '#000';
-    ctx.textBaseline = 'alphabetic';
-    ctx.font = `bold ${fontSmall}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    ctx.fillText(WATERMARK_1, padding, H - padding - fontTiny - lineGap);
+  ctx.fillStyle = '#000';
+  ctx.textBaseline = 'alphabetic';
 
-    ctx.font = `normal ${fontTiny}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    ctx.fillText(WATERMARK_2, padding, H - padding);
-  }
+  ctx.font = `bold ${fontSmall}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  ctx.fillText(WATERMARK_1, padding, H - padding - fontTiny - lineGap);
 
-  // 9) Return blob + file (used by share/copy/download)
-  const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
-  const file = new File([blob], 'icebreaker.png', { type:'image/png' });
+  ctx.font = `normal ${fontTiny}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  ctx.fillText(WATERMARK_2, padding, H - padding);
+
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1));
+  const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
   return { blob, file };
 }
 
