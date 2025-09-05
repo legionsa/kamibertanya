@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
 <script>
 (function () {
-  // --- Main Image Generator ---
+  // --- Main Image Generator (no changes needed here) ---
   async function generateShareImage() {
     const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
@@ -9,8 +9,6 @@
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
-
-    // 1. Recreate the background and duotone effect
     const css = getComputedStyle(document.documentElement);
     const surface = (css.getPropertyValue('--theme-background') || '#0f0f11').trim();
     const bgVar = css.getPropertyValue('--bg-image') || '';
@@ -21,10 +19,8 @@
     let bgUrl = null;
     const m = bgVar.match(/url\((?:'|")?(.+?)(?:'|")?\)/i);
     if (m && m[1]) bgUrl = m[1];
-
     ctx.fillStyle = surface;
     ctx.fillRect(0, 0, width, height);
-
     if (bgUrl) {
       await new Promise((resolve, reject) => {
         const img = new Image();
@@ -51,7 +47,6 @@
         img.src = new URL(bgUrl, window.location.href).href;
       });
     }
-
     ctx.globalCompositeOperation = 'multiply';
     const radial = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, Math.max(width, height) * 0.6);
     radial.addColorStop(0, `${duoA}66`); radial.addColorStop(1, '#0000');
@@ -63,26 +58,8 @@
     top.addColorStop(0, `${accent}1A`); top.addColorStop(1, '#0000');
     ctx.fillStyle = top; ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = 'source-over';
-
-    // 2. Draw text
     const questionText = (document.getElementById('question-display')?.innerText || '').trim();
-
-    // MODIFIED: Only include specific footer elements or filter unwanted text
-    const rawFooterElements = document.querySelector('footer')?.querySelectorAll('p, a');
-    let footerLines = [];
-    if (rawFooterElements) {
-        rawFooterElements.forEach(el => {
-            const text = (el.innerText || '').trim();
-            // Filter out specific unwanted texts
-            if (text && !['Download image', 'Copy image', 'KLVN'].includes(text)) {
-                footerLines.push(text);
-            }
-        });
-    }
-    // If 'KLVN' is part of a longer string, you might need more complex filtering
-    footerLines = footerLines.filter(line => !line.includes('KLVN'));
-
-
+    const footerLines = Array.from(document.querySelector('footer').querySelectorAll('p, a')).map(el => (el.innerText || '').trim()).filter(Boolean).filter(text => !['Download image', 'Copy image', 'Copy text'].includes(text));
     const padding = Math.round(Math.min(width, height) * 0.05);
     const maxTextWidth = Math.round(width * 0.82);
     const wrapLines = (ctx, text, maxWidth) => {
@@ -95,7 +72,6 @@
         if (line) lines.push(line);
         return lines;
     };
-
     const textColor = css.getPropertyValue('--theme-foreground').trim() || '#fff';
     ctx.fillStyle = textColor;
     ctx.textAlign = 'center';
@@ -104,7 +80,6 @@
     const footerLineHeight = Math.round(width * 0.036);
     const footerTopY = height - (Math.max(padding, Math.round(height * 0.04))) - (footerLines.length * footerLineHeight);
     footerLines.forEach((line, idx) => ctx.fillText(line, width / 2, footerTopY + (idx + 1) * footerLineHeight));
-    
     ctx.textBaseline = 'top';
     let fontPx = Math.round(width * 0.072);
     const setFont = px => { ctx.font = `bold ${px}px system-ui, -apple-system, Segoe UI, Roboto, Arial`; };
@@ -117,35 +92,59 @@
     }
     const startY = padding + Math.max(0, Math.floor(((footerTopY - gapToFooter - padding) - (lines.length * lineHeight)) / 2));
     lines.forEach((l, i) => ctx.fillText(l, width / 2, startY + i * lineHeight));
-
-    // 3. Export
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
     return { blob, file: new File([blob], 'icebreaker.png', { type: 'image/png' }) };
   }
 
-  // --- Action Functions ---
+  // --- NEW Action Functions ---
 
   async function doShare() {
     const shareBtn = document.getElementById('post-link');
     const originalText = shareBtn ? shareBtn.innerText : '';
     if (shareBtn) {
         shareBtn.innerText = 'Generating...';
-        shareBtn.style.pointerEvents = 'none'; // Prevent double clicks
+        shareBtn.style.pointerEvents = 'none';
     }
-    
+
     try {
         const { file, blob } = await generateShareImage();
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: 'Icebreaker' });
-        } else {
+        
+        if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
             alert("Web Share is not supported here. The image will be downloaded instead.");
             await downloadImage(blob);
+            return;
         }
+
+        const modal = document.getElementById('share-preview-modal');
+        const previewImg = document.getElementById('share-preview-image');
+        const confirmBtn = document.getElementById('share-confirm-button');
+        const cancelBtn = document.getElementById('share-cancel-button');
+        const imageUrl = URL.createObjectURL(blob);
+        previewImg.src = imageUrl;
+        modal.style.display = 'flex';
+
+        confirmBtn.onclick = async () => {
+            try {
+                await navigator.share({ files: [file], title: 'Icebreaker' });
+            } catch (err) {
+                console.warn("Share was cancelled or failed.", err);
+            } finally {
+                closeModal();
+            }
+        };
+        cancelBtn.onclick = () => closeModal();
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            URL.revokeObjectURL(imageUrl);
+            previewImg.src = '';
+            confirmBtn.onclick = null; // Clean up handlers
+            cancelBtn.onclick = null;
+        }
+
     } catch (error) {
-        console.error('Sharing failed:', error);
-        alert('Sharing failed. The image will be downloaded so you can share it manually.');
-        const { blob } = await generateShareImage(); // Re-generate for download
-        await downloadImage(blob);
+        console.error('Image generation failed:', error);
+        alert('Could not generate the image. Please try again.');
     } finally {
         if (shareBtn) {
             shareBtn.innerText = originalText;
@@ -156,17 +155,12 @@
 
   async function downloadImage(blob = null) {
     try {
-        if (!blob) {
-            blob = (await generateShareImage()).blob;
-        }
+        if (!blob) blob = (await generateShareImage()).blob;
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = 'icebreaker.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        a.href = url; a.download = 'icebreaker.png';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
     } catch (e) {
         console.error('Download failed:', e);
         alert('Download failed. Please try again.');
@@ -175,10 +169,9 @@
 
   async function copyImage() {
     try {
-        if (!navigator.clipboard || !navigator.clipboard.write) {
+        if (!navigator.clipboard?.write) {
             alert('Copying images is not supported by your browser. The image will be downloaded instead.');
-            await downloadImage();
-            return;
+            await downloadImage(); return;
         }
         const { blob } = await generateShareImage();
         await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
@@ -190,24 +183,10 @@
   }
 
   function copyText() {
-    try {
-        const text = document.getElementById('question-display')?.innerText || '';
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text);
-            alert('Text copied to clipboard!');
-        } else {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            alert('Text copied to clipboard!');
-        }
-    } catch (e) {
-        console.error('Copy text failed:', e);
-        alert('Could not copy text.');
-    }
+    const text = document.getElementById('question-display')?.innerText || '';
+    navigator.clipboard.writeText(text).then(() => alert('Text copied to clipboard!')).catch(err => {
+        console.error('Copy text failed:', err); alert('Could not copy text.');
+    });
   }
 
   // --- Wire up Event Listeners ---
@@ -264,4 +243,13 @@
 </div>
   <li><label>Iseng2nya <a id="credit-link" href=""></a></label></li>
 </ul>
-</label></li></li></ul><div class="footer-col-3"><ul><li><a href="https://github.com/rendall/icebreakers#readme"><em>KamiBertanya </em> based on <em>Icebreakers</em></a></li><li><a href="https://rendall.github.io/icebreakers">kamibertanya.netlify.app/</a></li></ul><button id="change-theme-button" title="Change color theme" aria-label="Change color theme"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"><g><path d="M32,61c-7.8,0-15.2-3.1-20.7-8.7c-5.5-5.6-8.5-13-8.3-20.8C3.2,16.5,15.2,4,30.2,3.1c10.8-0.7,20.7,4.5,26.4,13.5   c0.6,0.9,0.6,2,0.1,3c-0.6,1.1-1.8,1.7-3.1,1.5C53,21,52.5,21,52,21c-5.9,0-10.8,4.8-11,10.6c-0.1,3,1,5.9,3.1,8   C46.2,41.8,49,43,52,43c0.5,0,1,0,1.5-0.1c1.3-0.2,2.5,0.4,3.1,1.5c0.5,1,0.5,2.1-0.1,3C51.2,55.9,42,61,32,61z M32,5   c-0.6,0-1.1,0-1.7,0.1C16.3,5.9,5.2,17.6,5,31.6c-0.1,7.3,2.6,14.2,7.8,19.4C17.9,56.1,24.7,59,32,59c9.3,0,17.9-4.7,22.8-12.6   c0.3-0.4,0.1-0.8,0-1c-0.2-0.3-0.6-0.6-1.1-0.5C53.2,45,52.6,45,52,45c-3.6,0-6.9-1.4-9.3-4c-2.5-2.6-3.8-5.9-3.6-9.5   c0.2-6.9,6-12.5,12.9-12.6l0.1,0c0.6,0,1.2,0,1.8,0.1c0.5,0.1,0.9-0.2,1.1-0.5c0.1-0.2,0.2-0.5,0-0.9C49.9,9.7,41.3,5,32,5z"/><path d="M31,55c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S34.3,55,31,55z M31,45c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S33.2,45,31,45z"/><path d="M16,46c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S18.2,46,16,46z M16,40c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S17.1,40,16,40z"/><path d="M12,34c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S14.2,34,12,34z M12,28c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S13.1,28,12,28z"/><path d="M18,22c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S20.2,22,18,22z M18,16c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S19.1,16,18,16z"/><path d="M30,16c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S32.2,16,30,16z M30,10c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S31.1,10,30,10z"/></g></svg></button></div></footer></body></html>
+</label></li></li></ul><div class="footer-col-3"><ul><li><a href="https://github.com/rendall/icebreakers#readme"><em>KamiBertanya </em> based on <em>Icebreakers</em></a></li><li><a href="https://rendall.github.io/icebreakers">kamibertanya.netlify.app/</a></li></ul><button id="change-theme-button" title="Change color theme" aria-label="Change color theme"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"><g><path d="M32,61c-7.8,0-15.2-3.1-20.7-8.7c-5.5-5.6-8.5-13-8.3-20.8C3.2,16.5,15.2,4,30.2,3.1c10.8-0.7,20.7,4.5,26.4,13.5   c0.6,0.9,0.6,2,0.1,3c-0.6,1.1-1.8,1.7-3.1,1.5C53,21,52.5,21,52,21c-5.9,0-10.8,4.8-11,10.6c-0.1,3,1,5.9,3.1,8   C46.2,41.8,49,43,52,43c0.5,0,1,0,1.5-0.1c1.3-0.2,2.5,0.4,3.1,1.5c0.5,1,0.5,2.1-0.1,3C51.2,55.9,42,61,32,61z M32,5   c-0.6,0-1.1,0-1.7,0.1C16.3,5.9,5.2,17.6,5,31.6c-0.1,7.3,2.6,14.2,7.8,19.4C17.9,56.1,24.7,59,32,59c9.3,0,17.9-4.7,22.8-12.6   c0.3-0.4,0.1-0.8,0-1c-0.2-0.3-0.6-0.6-1.1-0.5C53.2,45,52.6,45,52,45c-3.6,0-6.9-1.4-9.3-4c-2.5-2.6-3.8-5.9-3.6-9.5   c0.2-6.9,6-12.5,12.9-12.6l0.1,0c0.6,0,1.2,0,1.8,0.1c0.5,0.1,0.9-0.2,1.1-0.5c0.1-0.2,0.2-0.5,0-0.9C49.9,9.7,41.3,5,32,5z"/><path d="M31,55c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S34.3,55,31,55z M31,45c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S33.2,45,31,45z"/><path d="M16,46c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S18.2,46,16,46z M16,40c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S17.1,40,16,40z"/><path d="M12,34c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S14.2,34,12,34z M12,28c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S13.1,28,12,28z"/><path d="M18,22c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S20.2,22,18,22z M18,16c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S19.1,16,18,16z"/><path d="M30,16c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S32.2,16,30,16z M30,10c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S31.1,10,30,10z"/></g></svg></button></div></footer>  <div id="share-preview-modal" style="display: none;">
+  <div class="modal-content">
+    <p>Your image is ready!</p>
+    <img id="share-preview-image" src="" alt="Share preview" />
+    <div class="modal-buttons">
+      <button id="share-confirm-button">Share Now</button>
+      <button id="share-cancel-button">Cancel</button>
+    </div>
+  </div>
+</div></body></html>
