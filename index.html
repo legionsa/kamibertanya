@@ -193,35 +193,6 @@
     'src/images/bg7.jpeg'
     // add as many as you want
   ];
- const pick = a => a[Math.floor(Math.random()*a.length)];
-  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
-  const jitter = (hex, j=8) => {
-    const h = hex.replace('#','');
-    const f = h.length===3 ? h.split('').map(c=>c+c).join('') : h;
-    const n = parseInt(f,16);
-    let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
-    const rnd = v => clamp(v + Math.round((Math.random()*2-1)*j), 0, 255);
-    r=rnd(r); g=rnd(g); b=rnd(b);
-    const H = x => x.toString(16).padStart(2,'0');
-    return `#${H(r)}${H(g)}${H(b)}`;
-  };
-  const setVar = (k,v)=>document.documentElement.style.setProperty(k,v);
-
-  function applyBackgroundAndDuotone(){
-    if (IMAGES.length) setVar('--bg-image', `url("${pick(IMAGES)}")`);
-    setVar('--duo-a', jitter('#f784c5', 10));
-    setVar('--duo-b', jitter('#1b602f', 10));
-    setVar('--accent', jitter('#000072', 6));
-  }
-
-  // First load
-  document.addEventListener('DOMContentLoaded', applyBackgroundAndDuotone);
-
-  // Also reapply on theme change if you have a button with this id
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const btn = document.getElementById('change-theme-button');
-    if (btn) btn.addEventListener('click', applyBackgroundAndDuotone);
-  });
 
   function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
   function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
