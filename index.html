@@ -1,73 +1,279 @@
-<!doctype html>
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <meta name="theme-color" content="#0f0f11" />
-    <meta name="color-scheme" content="dark light" />
-    <title>Kami Bertanya</title>
+<!doctype html><html lang="en"><head><title>KnowBetter based on Icebreakers</title><script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><meta charset="utf-8"/><meta name="description" content="A collection of icebreaking questions from around the web"/><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="A collection of icebreaking questions from around the web"><meta name="twitter:image" content="https://rendall.github.io/icebreakers/images/1200x675.png"><meta name="twitter:site" content="@rendall"><meta name="twitter:title" content="Icebreakers"><meta name="viewport" content="width=device-width,initial-scale=1"/><meta property="og:description" content="A collection of icebreaking questions from around the web"><meta property="og:image" content="https://rendall.github.io/icebreakers/images/1200x1200.png"><meta property="og:title" content="Icebreakers"><meta property="og:url" content="https://rendall.github.io/icebreakers/"><link rel="icon" type="image/png" href="favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><script defer="defer" src="main.js?v=2"></script><!-- Place this AFTER the existing main.js include -->
+<script>
+(function () {
+  // --- Helpers ---
+  const isMobile = () => {
+    // conservative mobile check: UA + viewport width
+    return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent)
+           || (Math.min(window.screen.width, window.screen.height) <= 820);
+  };
 
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <body>
-    <!-- Everything inside #capture-root will be exported -->
-    <main id="capture-root" class="app">
-      <header class="app__header">
-        <h1 class="app__title">Kami Bertanya</h1>
-      </header>
+  // Decide target size by device
+  function getTargetDimensions() {
+    if (isMobile()) {
+      // 9:16 (portrait) — Instagram Story friendly
+      return { width: 1080, height: 1920, ratioLabel: '9:16' };
+    }
+    // Desktop → 19:6 (landscape) as requested
+    // If you prefer 16:9, replace with: return { width: 1920, height: 1080, ratioLabel: '16:9' };
+    return { width: 1900, height: 600, ratioLabel: '19:6' };
+  }
 
-      <section class="app__content" id="content" aria-live="polite">
-        <p class="display-text" id="display-text">
-          Lo lebih pilih kerja remote lintas zona waktu atau onsite bareng tiap hari?
-        </p>
-      </section>
+  // Simple text wrap that returns lines array
+  function wrapLines(ctx, text, maxWidth) {
+    const words = (text || '').trim().split(/\s+/);
+    let line = '';
+    const lines = [];
+    for (let i = 0; i < words.length; i++) {
+      const test = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
 
-      <footer class="app__footer">
-        <div class="footer-left">
-          <small>
-            Got a nice answer?
-            <button id="download-image" class="text-link">Download image</button>
-            <button id="copy-image" class="text-link">Copy image</button>
-          </small>
-        </div>
+  // Pull footer text dynamically from .footer-col-3 li
+  function getFooterLines() {
+    const footer = document.querySelector('.footer-col-3');
+    const lines = [];
+    if (footer) {
+      footer.querySelectorAll('li').forEach(li => {
+        const t = (li.innerText || '').trim();
+        if (t) lines.push(t);
+      });
+    }
+    return lines;
+  }
 
-        <div class="footer-actions">
-          <button id="reload-button" class="btn-outline btn-outline--brand">
-            Rakyat Bertanya
-          </button>
+  // Main generator: centers question, stacks footer at bottom
+  async function generateResponsiveImage() {
+    const { width, height } = getTargetDimensions();
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
 
-          <!-- ADD: share icon button, same outline pill style -->
-          <button
-            id="post-link"
-            class="btn-outline btn-outline--brand btn-icon"
-            title="Bagikan gambar ini"
-            aria-label="Bagikan"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 width="24" height="24" viewBox="0 0 24 24"
-                 fill="currentColor" aria-hidden="true">
-              <path d="M 18 2 A 3 3 0 0 0 15 5 A 3 3 0 0 0 15.054688 5.5605469 L 7.9394531 9.7109375 A 3 3 0 0 0 6 9 A 3 3 0 0 0 3 12 A 3 3 0 0 0 6 15 A 3 3 0 0 0 7.9355469 14.287109 L 15.054688 18.439453 A 3 3 0 0 0 15 19 A 3 3 0 0 0 18 22 A 3 3 0 0 0 21 19 A 3 3 0 0 0 18 16 A 3 3 0 0 0 16.0625 16.712891 L 8.9453125 12.560547 A 3 3 0 0 0 9 12 A 3 3 0 0 0 8.9453125 11.439453 L 16.060547 7.2890625 A 3 3 0 0 0 18 8 A 3 3 0 0 0 21 5 A 3 3 0 0 0 18 2 z"/>
-            </svg>
-          </button>
-        </div>
+    // Background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
 
-        <div class="footer-right">
-          <small>
-            <em>KnowBetter based on Icebreakers</em><br/>
-            <a href="https://rendall.github.io/icebreakers" target="_blank" rel="noreferrer">rendall.github.io/icebreakers</a>
-          </small>
-        </div>
+    // Pull texts
+    const questionText = (document.getElementById('question-display')?.innerText || '').trim();
+    const footerLines = getFooterLines(); // e.g., ["KnowBetter based on Icebreakers", "rendall.github.io/icebreakers"]
 
-        <!-- Optional theme button users may click -->
-        <button id="change-theme-button" class="palette" title="Ganti tema" aria-label="Ganti tema">🎨</button>
-      </footer>
-    </main>
+    // Layout constants scale with canvas
+    const padding = Math.round(Math.min(width, height) * 0.05); // 5%
+    const maxTextWidth = Math.round(width * 0.82);
 
-    <!-- html2canvas for WYSIWYG export -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    // Footer typography
+    ctx.fillStyle = '#444';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.font = `${Math.round(width * 0.028)}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+    const footerLineHeight = Math.round(width * 0.036);
 
-    <!-- App logic -->
-    <script src="main.js" type="module"></script>
-  </body>
-</html>
+    // Compute footer block height
+    const footerBlockHeight = footerLines.length ? (footerLines.length * footerLineHeight) : 0;
+    const footerBottomPad = Math.max(padding, Math.round(height * 0.04));
+    const footerTopY = height - footerBottomPad - footerBlockHeight;
+
+    // Draw footer (stacked)
+    footerLines.forEach((line, idx) => {
+      ctx.fillText(line, width / 2, footerTopY + (idx + 1) * footerLineHeight);
+    });
+
+    // Question typography (bigger)
+    ctx.fillStyle = '#000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+
+    // Start from a big font and shrink until it fits nicely in width
+    let fontPx = Math.round(width * 0.072); // initial guess (~ 78px for 1080 width)
+    const minPx = Math.max(20, Math.round(width * 0.036));
+
+    function setFont(px){ ctx.font = `bold ${px}px system-ui, -apple-system, Segoe UI, Roboto, Arial`; }
+
+    setFont(fontPx);
+    let lines = wrapLines(ctx, questionText, maxTextWidth);
+    // If too many lines to fit between top & above footer, reduce font
+    const gapToFooter = footerLines.length ? Math.round(height * 0.07) : Math.round(height * 0.1);
+    const availableHeight = footerTopY - padding - gapToFooter;
+
+    let lineHeight = Math.round(fontPx * 1.25);
+    while ((lines.length * lineHeight) > availableHeight && fontPx > minPx) {
+      fontPx -= 2;
+      setFont(fontPx);
+      lineHeight = Math.round(fontPx * 1.25);
+      lines = wrapLines(ctx, questionText, maxTextWidth);
+    }
+
+    // Vertical centering within the middle band (top padding to footerTopY - gap)
+    const totalTextHeight = lines.length * lineHeight;
+    const middleTop = padding;
+    const middleBottom = footerTopY - gapToFooter;
+    const middleHeight = middleBottom - middleTop;
+    const startY = middleTop + Math.max(0, Math.floor((middleHeight - totalTextHeight) / 2));
+
+    // Draw question lines
+    lines.forEach((l, i) => {
+      ctx.fillText(l, width / 2, startY + i * lineHeight);
+    });
+
+    // Export
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 1));
+    const file = new File([blob], 'icebreaker.png', { type: 'image/png' });
+    return { blob, file };
+  }
+
+  // Share (Android Chrome) or download fallback
+  async function doShareOrDownload() {
+    try {
+      const { blob, file } = await generateResponsiveImage();
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Icebreaker' });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'icebreaker.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        alert('Image saved. Upload to Instagram Stories or TikTok.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Sharing failed. Please try again or save the image manually.');
+    }
+  }
+
+  // Wire up Share + optional Download buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const share = document.getElementById('post-link');
+    if (share) {
+      const clone = share.cloneNode(true);
+      share.replaceWith(clone); // avoid double listeners from bundled code
+      clone.addEventListener('click', (e) => { e.preventDefault(); doShareOrDownload(); });
+    }
+    const dl = document.getElementById('download-link');
+    if (dl) {
+      const clone = dl.cloneNode(true);
+      dl.replaceWith(clone);
+      clone.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const { blob } = await generateResponsiveImage();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'icebreaker.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+    }
+  });
+})();
+(function(){
+  // 1) List your images here (relative to this HTML file):
+  //    e.g., if you deploy with /images/, put "images/xxx.jpg"
+  const IMAGES = [
+    'src/images/bg1.jpg',
+    'src/images/bg2.webp',
+    'src/images/bg3.webp',
+    'src/images/bg4.jpg',
+    'src/images/bg5.webp',
+    'src/images/bg6.webp',
+    'src/images/bg7.jpeg'
+    // add as many as you want
+  ];
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+  // Jitter a hex color slightly (+-j per channel)
+  function jitter(hex, j=8){
+    const h = hex.replace('#','');
+    const full = h.length===3 ? h.split('').map(c=>c+c).join('') : h;
+    const n = parseInt(full,16);
+    let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    function rand(v){ return clamp(v + Math.round((Math.random()*2-1)*j), 0, 255); }
+    r=rand(r); g=rand(g); b=rand(b);
+    const hh = (x)=>x.toString(16).padStart(2,'0');
+    return `#${hh(r)}${hh(g)}${hh(b)}`;
+  }
+
+  function applyRandomBackground(){
+    if (!IMAGES.length) return;
+    const img = pick(IMAGES);
+    document.documentElement.style.setProperty('--bg-image', `url("${img}")`);
+
+    // Optional: small color variety each time (still around your brand)
+    document.documentElement.style.setProperty('--duo-a', jitter('#f784c5', 10));
+    document.documentElement.style.setProperty('--duo-b', jitter('#1b602f', 10));
+    document.documentElement.style.setProperty('--accent', jitter('#000072', 6));
+  }
+
+  // On first load
+  document.addEventListener('DOMContentLoaded', applyRandomBackground);
+
+  // Also when user clicks your existing change-theme button
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const btn = document.getElementById('change-theme-button');
+    if (btn) btn.addEventListener('click', applyRandomBackground);
+  });
+})();
+(function(){
+  function luminance([r,g,b]) {
+    const srgb = [r,g,b].map(v => v/255);
+    const lin = srgb.map(s => s <= 0.03928 ? s/12.92 : Math.pow((s+0.055)/1.055, 2.4));
+    return 0.2126*lin[0] + 0.7152*lin[1] + 0.0722*lin[2];
+  }
+  function parseRgb(str){
+    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(str||'');
+    return m ? [m[1],m[2],m[3]].map(Number) : [255,255,255];
+  }
+  function ensureContrast(){
+    const css = getComputedStyle(document.documentElement);
+    const bg = css.getPropertyValue('--theme-background');
+    const fg = css.getPropertyValue('--theme-foreground');
+    const Lb = luminance(parseRgb(getComputedStyle(document.body).backgroundColor));
+    const Lw = luminance([255,255,255]);
+    const Lk = luminance([0,0,0]);
+    const CR = (L1, L2) => (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
+
+    // pick the best of white/black/brand blue
+    const blue = [0,0,114];
+    const candidates = [
+      {c:'#ffffff', r: CR(Lw, Lb)},
+      {c:'#000000', r: CR(Lk, Lb)},
+      {c:'#000072', r: CR(luminance(blue), Lb)}
+    ].sort((a,b)=>b.r-a.r);
+
+    if (candidates[0].r < 4.5 || !fg) {
+      document.documentElement.style.setProperty('--theme-foreground', candidates[0].c);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', ensureContrast);
+})();
+</script>
+<link href="main.css" rel="stylesheet"></head><body><main><h2 id="question-display">...</h2></main><footer><button id="reload-button" class="footer-col-2">Rakyat Bertanya</button><button id="post-link" class="footer-col-2" title="Bagikan" aria-label="Bagikan">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+       viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M 18 2 A 3 3 0 0 0 15 5 A 3 3 0 0 0 15.054688 5.5605469 L 7.9394531 9.7109375 A 3 3 0 0 0 6 9 A 3 3 0 0 0 3 12 A 3 3 0 0 0 6 15 A 3 3 0 0 0 7.9355469 14.287109 L 15.054688 18.439453 A 3 3 0 0 0 15 19 A 3 3 0 0 0 18 22 A 3 3 0 0 0 21 19 A 3 3 0 0 0 18 16 A 3 3 0 0 0 16.0625 16.712891 L 8.9453125 12.560547 A 3 3 0 0 0 9 12 A 3 3 0 0 0 8.9453125 11.439453 L 16.060547 7.2890625 A 3 3 0 0 0 18 8 A 3 3 0 0 0 21 5 A 3 3 0 0 0 18 2 z"/>
+  </svg>
+</button>
+<ul class="footer-col-1"><li><label>Got a nice answer? <ul class="actions">
+<div class="actions-row">
+  <a id="download-link" href="#">Download image</a>
+  <a id="copy-link" href="#">Copy image</a>
+</div>
+  <li><label>Iseng2nya <a id="credit-link" href=""></a></label></li>
+</ul>
+</label></li></li></ul><div class="footer-col-3"><ul><li><a href="https://github.com/rendall/icebreakers#readme"><em>KnowBetter </em> based on <em>Icebreakers</em></a></li><li><a href="https://rendall.github.io/icebreakers">rendall.github.io/&#8203;icebreakers</a></li></ul><button id="change-theme-button" title="Change color theme" aria-label="Change color theme"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"><g><path d="M32,61c-7.8,0-15.2-3.1-20.7-8.7c-5.5-5.6-8.5-13-8.3-20.8C3.2,16.5,15.2,4,30.2,3.1c10.8-0.7,20.7,4.5,26.4,13.5   c0.6,0.9,0.6,2,0.1,3c-0.6,1.1-1.8,1.7-3.1,1.5C53,21,52.5,21,52,21c-5.9,0-10.8,4.8-11,10.6c-0.1,3,1,5.9,3.1,8   C46.2,41.8,49,43,52,43c0.5,0,1,0,1.5-0.1c1.3-0.2,2.5,0.4,3.1,1.5c0.5,1,0.5,2.1-0.1,3C51.2,55.9,42,61,32,61z M32,5   c-0.6,0-1.1,0-1.7,0.1C16.3,5.9,5.2,17.6,5,31.6c-0.1,7.3,2.6,14.2,7.8,19.4C17.9,56.1,24.7,59,32,59c9.3,0,17.9-4.7,22.8-12.6   c0.3-0.4,0.1-0.8,0-1c-0.2-0.3-0.6-0.6-1.1-0.5C53.2,45,52.6,45,52,45c-3.6,0-6.9-1.4-9.3-4c-2.5-2.6-3.8-5.9-3.6-9.5   c0.2-6.9,6-12.5,12.9-12.6l0.1,0c0.6,0,1.2,0,1.8,0.1c0.5,0.1,0.9-0.2,1.1-0.5c0.1-0.2,0.2-0.5,0-0.9C49.9,9.7,41.3,5,32,5z"/><path d="M31,55c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S34.3,55,31,55z M31,45c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S33.2,45,31,45z"/><path d="M16,46c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S18.2,46,16,46z M16,40c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S17.1,40,16,40z"/><path d="M12,34c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S14.2,34,12,34z M12,28c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S13.1,28,12,28z"/><path d="M18,22c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S20.2,22,18,22z M18,16c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S19.1,16,18,16z"/><path d="M30,16c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S32.2,16,30,16z M30,10c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S31.1,10,30,10z"/></g></svg></button></div></footer></body></html>
