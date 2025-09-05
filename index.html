@@ -180,26 +180,97 @@
     }
   });
 })();
-</script>
-<link href="main.css" rel="stylesheet"></head><body><main><h2 id="question-display">...</h2></main><footer><div class="footer-actions">
-  <button id="reload-button" class="btn-outline">Ganti pertanyaan lain</button>
+(function(){
+  // 1) List your images here (relative to this HTML file):
+  //    e.g., if you deploy with /images/, put "images/xxx.jpg"
+  const IMAGES = [
+    'src/images/bg1.jpg',
+    'src/images/bg2.webp',
+    'src/images/bg3.webp',
+    'src/images/bg4.jpg',
+    'src/images/bg5.webp',
+    'src/images/bg6.webp',
+    'src/images/bg7.jpeg'
+    // add as many as you want
+  ];
 
-  <button
-    id="share-button"
-    class="btn-outline btn-icon"
-    title="Bagikan gambar ini"
-    aria-label="Bagikan"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         width="20" height="20" viewBox="0 0 24 24"
-         fill="currentColor" aria-hidden="true">
-      <path d="M 18 2 A 3 3 0 0 0 15 5 A 3 3 0 0 0 15.054688 5.5605469 L 7.9394531 9.7109375 A 3 3 0 0 0 6 9 A 3 3 0 0 0 3 12 A 3 3 0 0 0 6 15 A 3 3 0 0 0 7.9355469 14.287109 L 15.054688 18.439453 A 3 3 0 0 0 15 19 A 3 3 0 0 0 18 22 A 3 3 0 0 0 21 19 A 3 3 0 0 0 18 16 A 3 3 0 0 0 16.0625 16.712891 L 8.9453125 12.560547 A 3 3 0 0 0 9 12 A 3 3 0 0 0 8.9453125 11.439453 L 16.060547 7.2890625 A 3 3 0 0 0 18 8 A 3 3 0 0 0 21 5 A 3 3 0 0 0 18 2 z"></path>
-    </svg>
-  </button>
-</div>
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+  // Jitter a hex color slightly (+-j per channel)
+  function jitter(hex, j=8){
+    const h = hex.replace('#','');
+    const full = h.length===3 ? h.split('').map(c=>c+c).join('') : h;
+    const n = parseInt(full,16);
+    let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    function rand(v){ return clamp(v + Math.round((Math.random()*2-1)*j), 0, 255); }
+    r=rand(r); g=rand(g); b=rand(b);
+    const hh = (x)=>x.toString(16).padStart(2,'0');
+    return `#${hh(r)}${hh(g)}${hh(b)}`;
+  }
+
+  function applyRandomBackground(){
+    if (!IMAGES.length) return;
+    const img = pick(IMAGES);
+    document.documentElement.style.setProperty('--bg-image', `url("${img}")`);
+
+    // Optional: small color variety each time (still around your brand)
+    document.documentElement.style.setProperty('--duo-a', jitter('#f784c5', 10));
+    document.documentElement.style.setProperty('--duo-b', jitter('#1b602f', 10));
+    document.documentElement.style.setProperty('--accent', jitter('#000072', 6));
+  }
+
+  // On first load
+  document.addEventListener('DOMContentLoaded', applyRandomBackground);
+
+  // Also when user clicks your existing change-theme button
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const btn = document.getElementById('change-theme-button');
+    if (btn) btn.addEventListener('click', applyRandomBackground);
+  });
+})();
+(function(){
+  function luminance([r,g,b]) {
+    const srgb = [r,g,b].map(v => v/255);
+    const lin = srgb.map(s => s <= 0.03928 ? s/12.92 : Math.pow((s+0.055)/1.055, 2.4));
+    return 0.2126*lin[0] + 0.7152*lin[1] + 0.0722*lin[2];
+  }
+  function parseRgb(str){
+    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(str||'');
+    return m ? [m[1],m[2],m[3]].map(Number) : [255,255,255];
+  }
+  function ensureContrast(){
+    const css = getComputedStyle(document.documentElement);
+    const bg = css.getPropertyValue('--theme-background');
+    const fg = css.getPropertyValue('--theme-foreground');
+    const Lb = luminance(parseRgb(getComputedStyle(document.body).backgroundColor));
+    const Lw = luminance([255,255,255]);
+    const Lk = luminance([0,0,0]);
+    const CR = (L1, L2) => (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
+
+    // pick the best of white/black/brand blue
+    const blue = [0,0,114];
+    const candidates = [
+      {c:'#ffffff', r: CR(Lw, Lb)},
+      {c:'#000000', r: CR(Lk, Lb)},
+      {c:'#000072', r: CR(luminance(blue), Lb)}
+    ].sort((a,b)=>b.r-a.r);
+
+    if (candidates[0].r < 4.5 || !fg) {
+      document.documentElement.style.setProperty('--theme-foreground', candidates[0].c);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', ensureContrast);
+})();
+</script>
+<link href="main.css" rel="stylesheet"></head><body><main><h2 id="question-display">...</h2></main><footer><button id="reload-button" class="footer-col-2">Rakyat Bertanya</button><button id="post-link" class="footer-col-2" title="Bagikan" aria-label="Bagikan">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+       viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M 18 2 A 3 3 0 0 0 15 5 A 3 3 0 0 0 15.054688 5.5605469 L 7.9394531 9.7109375 A 3 3 0 0 0 6 9 A 3 3 0 0 0 3 12 A 3 3 0 0 0 6 15 A 3 3 0 0 0 7.9355469 14.287109 L 15.054688 18.439453 A 3 3 0 0 0 15 19 A 3 3 0 0 0 18 22 A 3 3 0 0 0 21 19 A 3 3 0 0 0 18 16 A 3 3 0 0 0 16.0625 16.712891 L 8.9453125 12.560547 A 3 3 0 0 0 9 12 A 3 3 0 0 0 8.9453125 11.439453 L 16.060547 7.2890625 A 3 3 0 0 0 18 8 A 3 3 0 0 0 21 5 A 3 3 0 0 0 18 2 z"/>
+  </svg>
+</button>
 <ul class="footer-col-1"><li><label>Got a nice answer? <ul class="actions">
 <div class="actions-row">
-  <a id="post-link" href="#">Share it!</a>
   <a id="download-link" href="#">Download image</a>
   <a id="copy-link" href="#">Copy image</a>
 </div>
