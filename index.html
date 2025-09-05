@@ -3,6 +3,7 @@
 (function () {
   // --- Main Image Generator ---
   async function generateShareImage() {
+    // This function generates the image with the correct background and no "KLVN" text.
     const getTargetDimensions = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent) || (Math.min(window.screen.width, window.screen.height) <= 820) ? { width: 1080, height: 1920 } : { width: 1900, height: 600 };
     const { width, height } = getTargetDimensions();
     const canvas = document.createElement('canvas');
@@ -123,7 +124,7 @@
             previewImg.src = '';
             confirmBtn.removeEventListener('click', confirmHandler);
             cancelBtn.removeEventListener('click', cancelHandler);
-            resolve(); // Resolve the promise to signal the modal is closed
+            resolve(); // Signal that the modal flow is complete
         };
 
         const confirmHandler = async () => {
@@ -136,9 +137,7 @@
             }
         };
 
-        const cancelHandler = () => {
-            closeModal();
-        };
+        const cancelHandler = () => closeModal();
 
         confirmBtn.addEventListener('click', confirmHandler);
         cancelBtn.addEventListener('click', cancelHandler);
@@ -159,17 +158,18 @@
         if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
             alert("Web Share is not supported here. The image will be downloaded instead.");
             await downloadImage(blob);
-            return;
+            return; // Exit, but 'finally' will still run
         }
         
-        // Show the modal and wait for the user to finish
+        // Show the modal and WAIT for it to be closed
         await showSharePreview(file, blob);
 
     } catch (error) {
         console.error('An error occurred:', error);
         alert('Could not complete the share action. Please try again.');
     } finally {
-        // This now runs AFTER the modal is closed, reliably restoring the button
+        // THIS IS THE GUARANTEE: This block always runs after the 'try' block,
+        // ensuring the button is restored no matter what happens.
         if (shareBtn) {
             shareBtn.innerText = originalText;
             shareBtn.style.pointerEvents = 'auto';
@@ -228,7 +228,7 @@
 })();
 
 (function() {
-  // --- Background randomizer script (no changes) ---
+  // --- Background randomizer script ---
   const IMAGES = [ 'src/images/bg1.jpg', 'src/images/bg2.webp', 'src/images/bg3.webp', 'src/images/bg4.jpg', 'src/images/bg5.webp', 'src/images/bg6.webp', 'src/images/bg7.jpeg' ];
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
