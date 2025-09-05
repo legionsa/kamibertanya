@@ -1,380 +1,421 @@
-export type Credit = { name: string; href: string };
-export type Question = { question: string; credit: Credit }; // Note that Question contains Credit
-export type Theme = {
-  name: string;
-  foreground: string;
-  background: string;
-  highlight: string;
-  font: string;
-};
+/* -------------------------------------------
+ * utilities.ts
+ * - Random background from src/images
+ * - Duotone overlay variables
+ * - WCAG 2.1 contrast (4.5:1) + text color pick
+ * - Theme change hookup (press 'T' to change theme)
+ * - Export pipeline: WYSIWYG (html2canvas) + background composite
+ * - Share/Copy/Download actions
+ * ------------------------------------------ */
 
-export const toSlug = (str: string):string => str
-    .toLowerCase()
-    .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/_/g, "")
-    .replace(/-{2,}/g, "-")
-    .replace(/-$/, "")
-    .replace(/^-/, "")
+type Maybe<T> = T | null | undefined;
 
-export const isSlugMatch = (slug: string, question: string) => slug === toSlug(question);
-
-export const reverseSlug = (slug: string, questions: string[]) => questions.find((question) => isSlugMatch(slug, question));
-
-
-export const LOCAL_STORE_QUESTIONS_KEY = "icebreaker-questions";
-export const LOCAL_STORE_INDEX_KEY = "icebreaker-index";
-export const LOCAL_STORE_THEME_KEY = "icebreaker-theme";
-
-export const removeListMarkdown = (line: string) =>
-  line.slice(line.indexOf("*") + 1).trim();
-
-export const parseCredit = (line: string) => {
-  const match = RegExp(/Credit:\s*\[(.*)\]\((.*)\)/gm).exec(line);
-  return { name: match[1], href: match[2] };
-};
-
-export const defaultTheme: Theme = {
-  name: "Carnival",
-  background: "#2B50AA",
-  foreground: "#FF9FE5",
-  highlight: "#FF9FE5",
-  font: "Rammetto One",
-};
-
-export const isTheme = (theme: Theme | string): theme is Theme =>
-  typeof theme !== "string" && "foreground" in theme;
-
-export const recoverTheme = () => {
-  const themeStr =
-    window.localStorage.getItem(LOCAL_STORE_THEME_KEY) || "default-theme";
-  try {
-    const theme: Theme | string = JSON.parse(themeStr);
-    if (!isTheme(theme)) return defaultTheme;
-    return { ...defaultTheme, ...theme };
-  } catch (error) {
-    return defaultTheme;
-  }
-};
-
-/**
- * Creates a debounced function that delays invoking the provided
- * function until after `wait` milliseconds have elapsed since the
- * last time the debounced function was invoked. Typically used to
- * run an expensive or async function after user interaction.
- *
- * @template T The type of the function to debounce.
- * @param {T} func The function to debounce.
- * @param {number} [wait=250] The number of milliseconds to delay.
- * @returns {(...args: Parameters<T>) => void} Returns the new debounced function.
- *
- * @example
- * // Usage with a function that takes one string parameter
- * const logMessage = (message: string) =>  * const debouncedLogMessage = debounceFunc(logMessage, 300);
- * debouncedLogMessage('Hello, world!');
+/** Gather all images under src/images with webpack require.context.
+ *  If your bundler does not support this, the fallback below tries to guess by static import glob.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const debounceFunc = <T extends (...args: any[]) => void>(
-  func: T,
-  wait = 250
-) => {
-  let debounceTimeout: number | null = null
-  return (...args: Parameters<T>): void => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    window.clearTimeout(debounceTimeout!)
-    debounceTimeout = window.setTimeout(() => {
-      func(...args)
-    }, wait)
+let imageUrls: string[] = [];
+
+function initImagePool() {
+  try {
+    // @ts-ignore - Webpack
+    const ctx = require.context("./images", false, /\.(png|jpe?g|webp|avif|gif)$/i);
+    imageUrls = ctx.keys().map((k: string) => ctx(k));
+  } catch {
+    // Vite fallback (needs vite-plugin-glob or import.meta.globEager in TS config)
+    try {
+      // @ts-ignore - Vite
+      const modules = import.meta.glob("./images/*.{png,jpg,jpeg,webp,avif,gif}", {
+        eager: true,
+        as: "url",
+      });
+      imageUrls = Object.values(modules) as string[];
+    } catch {
+      // worst case: static defaults (edit as needed)
+      imageUrls = [
+        // e.g. "/src/images/bg1.jpg",
+      ];
+    }
   }
 }
 
+function randInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
 
-/** For small displays, iteratively expand the question display to fit
- * the 'main' element */
-export const fitDisplay = () => {
-  const main = document.querySelector("main") as HTMLDivElement;
-  const { clientWidth, clientHeight } = main;
+export function getRandomImageUrl(): Maybe<string> {
+  if (!imageUrls.length) initImagePool();
+  return imageUrls.length ? imageUrls[randInt(imageUrls.length)] : null;
+}
 
-  // In any case, remove any inline font-size
-  const display = document.querySelector("#question-display") as HTMLDivElement;
-  display.style.fontSize = "";
+/* ---------------------------
+ * WCAG contrast helpers
+ * -------------------------- */
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "").trim();
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const n = parseInt(full, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
 
-  // Only for small display sizes
-  if (clientWidth >= 600 && clientHeight >= 600) {
-    return;
-  }
+function srgbToLin(c: number) {
+  const s = c / 255;
+  return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+}
 
-  // Remove question display from flow and hide it to prevent jumping
-  document.documentElement.classList.add("font-resizing");
+function relativeLuminance(hex: string) {
+  const [r, g, b] = hexToRgb(hex);
+  const R = srgbToLin(r);
+  const G = srgbToLin(g);
+  const B = srgbToLin(b);
+  return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+}
 
-  /** Recursively handle resizing **/
-  const reduceSize = (
-    fontSize?: number,
-    targetWidth?: number,
-    targetHeight?: number,
-    sanity = 100
-  ) => {
-    if (fontSize === undefined)
-      setTimeout(() => {
-        const targetWidth = main.getBoundingClientRect().width;
-        const targetHeight = main.getBoundingClientRect().height;
-        reduceSize(8, targetWidth, targetHeight);
-      }, 1);
-    else {
-      display.style.fontSize = `${fontSize}rem`;
-      setTimeout(() => {
-        const isTooLarge =
-          display.getBoundingClientRect().width > targetWidth ||
-          display.getBoundingClientRect().height > targetHeight;
-        if (isTooLarge && sanity > 0) {
-          reduceSize(fontSize - 0.1, targetWidth, targetHeight, sanity - 1);
-        } else document.documentElement.classList.remove("font-resizing");
-      }, 1);
+function contrastRatio(fg: string, bg: string) {
+  const L1 = relativeLuminance(fg);
+  const L2 = relativeLuminance(bg);
+  const [light, dark] = L1 > L2 ? [L1, L2] : [L2, L1];
+  return (light + 0.05) / (dark + 0.05);
+}
+
+/** Choose the most prominent/readable text color among candidates */
+export function pickReadableTextColor(
+  bgHex: string,
+  candidates = ["#ffffff", "#000000", "#000072"]
+) {
+  let best = candidates[0];
+  let bestRatio = 0;
+  for (const c of candidates) {
+    const ratio = contrastRatio(c, bgHex);
+    if (ratio > bestRatio) {
+      best = c;
+      bestRatio = ratio;
     }
+  }
+  // Prefer one that passes 4.5:1 if possible
+  const passing = candidates
+    .map((c) => ({ c, r: contrastRatio(c, bgHex) }))
+    .filter((x) => x.r >= 4.5)
+    .sort((a, b) => b.r - a.r);
+  return passing.length ? passing[0].c : best;
+}
+
+/* ---------------------------
+ * CSS variable setters
+ * -------------------------- */
+function setCssVar(name: string, value: string) {
+  document.documentElement.style.setProperty(name, value);
+}
+
+export function setRandomBackground(force = false) {
+  const url = getRandomImageUrl();
+  if (url || force) {
+    setCssVar("--bg-image", url ? `url("${url}")` : "none");
+  }
+  // You can also randomize duotone slightly each change if desired:
+  // jitterDuotone();
+}
+
+export function setThemeSurfaceColor(surfaceHex: string) {
+  setCssVar("--surface", surfaceHex);
+  const readable = pickReadableTextColor(surfaceHex);
+  setCssVar("--theme-foreground", readable);
+}
+
+/* Optional: small hue jitter if you want subtle variety */
+function jitterHex(hex: string, amt = 0) {
+  if (!amt) return hex;
+  const [r, g, b] = hexToRgb(hex);
+  const j = (v: number) =>
+    Math.max(0, Math.min(255, Math.round(v + (Math.random() * 2 - 1) * amt)));
+  const toHex = (n: number) => n.toString(16).padStart(2, "0");
+  return `#${toHex(j(r))}${toHex(j(g))}${toHex(j(b))}`;
+}
+
+export function jitterDuotone(amount = 0) {
+  setCssVar("--duo-a", jitterHex("#f784c5", amount));
+  setCssVar("--duo-b", jitterHex("#1b602f", amount));
+  setCssVar("--accent", jitterHex("#000072", amount));
+}
+
+/* ---------------------------
+ * THEME handling
+ * -------------------------- */
+
+/** Minimal theme manager:
+ *  - Press 'T' to toggle surface between two examples
+ *  - Dispatches 'theme-changed' so background randomizes each time
+ *  If your app already has setTheme(), you can call setThemeSurfaceColor()
+ *  inside it and dispatch the same event.
+ */
+export function installThemeToggler() {
+  let dark = true;
+  const apply = () => {
+    const surface = dark ? "#0f0f11" : "#f6f7f8";
+    setThemeSurfaceColor(surface);
+    // Every theme change -> pick a new background
+    setRandomBackground(true);
+    document.dispatchEvent(new CustomEvent("theme-changed", { detail: { surface } }));
   };
 
-  reduceSize();
-};
+  window.addEventListener("keydown", (ev) => {
+    if (ev.key.toLowerCase() === "t") {
+      dark = !dark;
+      apply();
+    }
+  });
 
-export const loadedFonts = (): FontFace[] => {
-  let fontsArray: FontFace[] = [];
-  document.fonts.forEach((font) => fontsArray.push(font));
-  const uniqueFontsArray = fontsArray.reduce((acc, curr) => {
-    if (!acc.includes(curr.family)) return [...acc, curr.family];
-    return acc;
-  }, []);
-  return uniqueFontsArray;
-};
+  // initial
+  apply();
+}
 
-export const getCurrentTheme = () => ({
-  foreground:
-    document.documentElement.style.getPropertyValue("--theme-foreground"),
-  background:
-    document.documentElement.style.getPropertyValue("--theme-background"),
-  highlight:
-    document.documentElement.style.getPropertyValue("--theme-highlight"),
-  font: document.documentElement.style.getPropertyValue("--theme-font").replace(/"/g, "")
-});
+/* ---------------------------
+ * EXPORT PIPELINE (WYSIWYG)
+ * --------------------------
+ * We composite:
+ *  1) the same background + duotone as the page
+ *  2) a raster of #capture-root via html2canvas
+ */
 
-export const hasFont = (font: string) =>
-  loadedFonts().some((fontFace) => fontFace.family === font);
+function getNumberFromCssVar(name: string, fallback = 0.2): number {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name);
+  const v = parseFloat(raw);
+  return Number.isFinite(v) ? v : fallback;
+}
 
-export const setFont = (font: string) => {
-  const fontName = font.replace(/\s/g, "+").replace(/\"/g, "");
-  const fontUrl = `https://fonts.googleapis.com/css?family=${fontName}&display=swap`;
+function parseCssColor(hex: string): [number, number, number, number] {
+  const [r, g, b] = hexToRgb(hex);
+  return [r, g, b, 255];
+}
 
-  if (hasFont(font)) {
-    fitDisplay();
-    return;
+async function rasterNode(node: HTMLElement, scale = 2) {
+  const html2canvas = (window as any).html2canvas as
+    | ((
+        el: HTMLElement,
+        opts?: { backgroundColor?: string; scale?: number }
+      ) => Promise<HTMLCanvasElement>)
+    | undefined;
+
+  if (!html2canvas) {
+    throw new Error("html2canvas belum tersedia.");
   }
 
-  // Google font urls link to @fontface rules and not the fonts themselves.
-  const link = document.createElement("link");
-  link.href = fontUrl;
-  link.rel = "stylesheet";
-
-  // Wrap font name in quotes if it contains spaces
-  const themeFont = font.includes(" ") ? `"${font}"` : font;
-  link.addEventListener("load", () => {
-    document.documentElement.style.setProperty("--theme-font", themeFont);
-    fitDisplay();
+  return await html2canvas(node, {
+    backgroundColor: null, // keep transparency; we composite on bg
+    scale,
   });
-  link.addEventListener("error", () => {
-    if (font !== defaultTheme.font) setFont(defaultTheme.font);
+}
+
+function drawDuotone(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  duoA = "#f784c5",
+  duoB = "#1b602f",
+  accent = "#000072"
+) {
+  // radial glow
+  const radial = ctx.createRadialGradient(w * 0.2, h * 0.2, 0, w * 0.2, h * 0.2, Math.max(w, h) * 0.6);
+  radial.addColorStop(0, duoA + "66"); // ~40% (66 hex)
+  radial.addColorStop(1, "#00000000");
+  ctx.globalCompositeOperation = "multiply";
+  ctx.fillStyle = radial;
+  ctx.fillRect(0, 0, w, h);
+
+  // diagonal duotone sweep
+  const linear = ctx.createLinearGradient(0, 0, w, h);
+  linear.addColorStop(0, duoA + "73"); // ~45%
+  linear.addColorStop(1, duoB + "73");
+  ctx.fillStyle = linear;
+  ctx.fillRect(0, 0, w, h);
+
+  // subtle accent from top
+  const top = ctx.createLinearGradient(0, 0, 0, h);
+  top.addColorStop(0, accent + "1A"); // ~10%
+  top.addColorStop(1, "#00000000");
+  ctx.fillStyle = top;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.globalCompositeOperation = "source-over";
+}
+
+async function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => res(img);
+    img.onerror = rej;
+    img.src = url;
   });
-  document.head.appendChild(link);
-};
+}
 
-export const setTheme = (theme: Theme) => {
-  const root = document.documentElement;
-  root.style.setProperty("--theme-foreground", theme.foreground);
-  root.style.setProperty("--theme-background", theme.background);
-  root.style.setProperty("--theme-highlight", theme.highlight);
-  setFont(theme.font);
-  const display = document.querySelector("#question-display") as HTMLDivElement;
-  display.style.fontSize = "";
-  window.localStorage.setItem(LOCAL_STORE_THEME_KEY, JSON.stringify(theme));
-  console.info(`Theme ${theme.name}`)
-};
+export async function renderCurrentToCanvas(): Promise<HTMLCanvasElement> {
+  const root = (document.getElementById("capture-root") ||
+    document.body) as HTMLElement;
 
-export const fetchFile = (url: string) =>
-  fetch(url).then((response) => response.text());
+  // Compute size from the root to preserve layout aspect
+  const rect = root.getBoundingClientRect();
+  const scale = Math.min(2, Math.max(1.5, window.devicePixelRatio || 2));
+  const width = Math.max(800, Math.round(rect.width));
+  const height = Math.max(600, Math.round(rect.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(width * scale);
+  canvas.height = Math.round(height * scale);
+  const ctx = canvas.getContext("2d")!;
 
-export const loadQuestions = () =>
-  fetchFile("QUESTIONS.md").then((questionsFile) =>
-    questionsFile
-      .split("\n")
-      .filter((line) => line.match(/^\s*\*/))
-      .map(removeListMarkdown)
+  // Fill base with --surface
+  const surface =
+    getComputedStyle(document.documentElement).getPropertyValue("--surface").trim() ||
+    "#0f0f11";
+  ctx.fillStyle = surface;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw background image (grayscale, 20% like page)
+  const bgImageCss =
+    getComputedStyle(document.documentElement).getPropertyValue("--bg-image");
+  const match = /url\("(.*)"\)/.exec(bgImageCss);
+  if (match && match[1]) {
+    try {
+      const img = await loadImage(match[1]);
+      // cover
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const imgRatio = iw / ih;
+      const canRatio = cw / ch;
+      let dw = cw;
+      let dh = ch;
+      if (imgRatio > canRatio) {
+        // image wider
+        dh = ch;
+        dw = dh * imgRatio;
+      } else {
+        // image taller
+        dw = cw;
+        dh = dw / imgRatio;
+      }
+      const dx = (cw - dw) / 2;
+      const dy = (ch - dh) / 2;
+
+      // draw grayscale by drawing, then desaturate
+      ctx.save();
+      ctx.globalAlpha = getNumberFromCssVar("--bg-opacity", 0.2); // ~0.2
+      ctx.drawImage(img, dx, dy, dw, dh);
+
+      // grayscale pass
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i],
+          g = data[i + 1],
+          b = data[i + 2];
+        // perceptual grayscale
+        const gray = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
+        data[i] = gray;
+        data[i + 1] = gray;
+        data[i + 2] = gray;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      ctx.restore();
+    } catch {
+      // ignore bg failure
+    }
+  }
+
+  // Duotone & accent overlays using same CSS vars
+  const duoA =
+    getComputedStyle(document.documentElement).getPropertyValue("--duo-a").trim() ||
+    "#f784c5";
+  const duoB =
+    getComputedStyle(document.documentElement).getPropertyValue("--duo-b").trim() ||
+    "#1b602f";
+  const accent =
+    getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() ||
+    "#000072";
+  drawDuotone(ctx, canvas.width, canvas.height, duoA, duoB, accent);
+
+  // Raster the DOM node (WYSIWYG) and composite centered
+  const nodeCanvas = await rasterNode(root, scale);
+  ctx.drawImage(nodeCanvas, 0, 0);
+
+  return canvas;
+}
+
+/* ---------------------------
+ * SHARE / COPY / DOWNLOAD
+ * -------------------------- */
+export async function exportBlob(type = "image/png", quality?: number) {
+  const canvas = await renderCurrentToCanvas();
+  return await new Promise<Blob>((res) =>
+    canvas.toBlob((b) => res(b!), type, quality)
   );
+}
 
-export const parseThemes = (themesFile: string): Theme[] =>
-  themesFile
-    .split("\n")
-    .filter((line) => line.match(/^\*/))
-    .map((line) =>
-      new RegExp(
-        /^\* _([\w \d]*)_ ([\w#]*) ([\w#]*) ([\w#]*) _([\w \d]*?)_$/
-      ).exec(line)
-    )
-    .map(([, name, background, foreground, highlight, font]) => ({
-      name,
-      foreground,
-      background,
-      highlight,
-      font,
-    }));
-export const getThemes = () => fetchFile("THEMES.md").then(parseThemes);
+export async function downloadCurrent(filename = "kamibertanya.png") {
+  const blob = await exportBlob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
-/** Accepts lines of text from QUESTIONS.md and returns an array of
- * { question, credit } objects */
-export const parseQuestions = (lines: string[]): Question[] => {
-  const parsedLines: [Credit, Question[]] = lines.reduce<[Credit, Question[]]>(
-    ([credit, questions]: [Credit, Question[]], line: string) => {
-      if (line.startsWith("Credit:")) {
-        const newCredit = parseCredit(line);
-        return [newCredit, questions];
-      } else return [credit, [...questions, { question: line, credit }]];
-    },
-    [{ name: "", href: "" }, []]
-  );
-  // Index 0 of the tuple [Credit, Question[]] is a helper value
-  // to be discarded after the questions array is created:
-  const [_, questions] = parsedLines;
+export async function copyCurrent() {
+  const blob = await exportBlob();
+  // Try navigator.clipboard.write
+  const item = new ClipboardItem({ [blob.type]: blob });
+  await navigator.clipboard.write([item]);
+}
 
-  return questions;
-};
+export async function shareCurrent() {
+  const blob = await exportBlob();
+  const file = new File([blob], "kamibertanya.png", { type: blob.type, lastModified: Date.now() });
 
-/** Shuffle the entire array to avoid repeating questions in the same session */
-export const shuffleQuestions = (questions: Question[]) => {
-  return questions.reduce(
-    (shuffledQuestions, _, i) => {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledQuestions[i], shuffledQuestions[j]] = [
-        shuffledQuestions[j],
-        shuffledQuestions[i],
-      ];
-      return shuffledQuestions;
-    },
-    [...questions]
-  );
-};
+  if ((navigator as any).canShare && (navigator as any).canShare({ files: [file] })) {
+    await (navigator as any).share({
+      files: [file],
+      title: "Kami Bertanya",
+      text: "Dibagikan dari Kami Bertanya",
+    });
+    return "shared";
+  }
 
-export const setupUI = (questions: Question[]) => {
-  const localIndex = localStorage.getItem(LOCAL_STORE_INDEX_KEY) ?? "0";
-  let index = parseInt(localIndex);
-
-  // Advance the index by 1 if the user has navigated here
-  // but not if the user has reloaded the page.
-  const didNavigate =
-    (
-      performance?.getEntriesByType(
-        "navigation"
-      ) as PerformanceNavigationTiming[]
-    )?.[0]?.type === "navigate" ||
-    performance?.navigation?.type === performance?.navigation?.TYPE_NAVIGATE;
-
-  if (didNavigate && index > 0) index = index + 1;
-
-  const displayQuestion = (question: Question) => {
-    const questionDisplay = document.querySelector(
-      "#question-display"
-    ) as HTMLParagraphElement;
-    questionDisplay.innerHTML = question.question;
-
-    const creditLink = document.querySelector(
-      "#credit-link"
-    ) as HTMLAnchorElement;
-    creditLink.href = question.credit.href;
-    creditLink.innerHTML = question.credit.name;
-
-    const postLink = document.querySelector(
-      "#post-link"
-    ) as HTMLAnchorElement;
-
-    const origin = postLink.dataset.origin;
-    const postHref = `${origin}/${toSlug(question.question)}`;
-    postLink.href = postHref;
-
-    fitDisplay();
-  };
-
-  displayQuestion(questions[index]);
-
-  const reloadButton = document.querySelector(
-    "#reload-button"
-  ) as HTMLButtonElement;
-
-  reloadButton.addEventListener("click", () => {
-    const isResizing = document.documentElement.classList.contains("font-resizing");
-    if (isResizing) return; // Repeated clicks will cause the font resize to be visible
-    index = (index + 1) % questions.length;
-    localStorage.setItem(LOCAL_STORE_INDEX_KEY, index.toString());
-    window.history.pushState(index, questions[index].question);
-    displayQuestion(questions[index]);
-  });
-
-  window.onpopstate = () => {
-    const i = window.history.state ?? 0;
-    localStorage.setItem(LOCAL_STORE_INDEX_KEY, i.toString());
-    displayQuestion(questions[i]);
-  };
-};
-
-export const setupThemes = async () => {
-  const themes = await getThemes();
-  const changeThemeButton = document.querySelector(
-    "#change-theme-button"
-  ) as HTMLButtonElement;
-
-  changeThemeButton.addEventListener("click", () => {
-    const body = document.querySelector("body");
-    body.classList.add("themed"); // Adds a background transition easing animation
-    const currentTheme = getCurrentTheme();
-    const currentThemeIndex = themes.findIndex(
-      (theme) =>
-        theme.background === currentTheme.background &&
-        theme.foreground === currentTheme.foreground &&
-        theme.highlight === currentTheme.highlight &&
-        theme.font === currentTheme.font
-    );
-    const nextThemeIndex =
-      currentThemeIndex === -1 ? 0 : (currentThemeIndex + 1) % themes.length;
-    const nextTheme = themes[nextThemeIndex];
-    setTheme(nextTheme);
-  });
-};
-
-export const init = () =>
-  new Promise<void>((resolve) => {
-    const initTheme = recoverTheme();
-    setTheme(initTheme);
-    window.addEventListener("resize", debounceFunc( fitDisplay ));
-    resolve();
-  });
-
-/** Return stored questions if they exist and are updated.
- * Return loaded, parsed and shuffled questions if not.  */
-export const interpretQuestions = (lines: string[]) => {
-  const localQuestions: string =
-    localStorage?.getItem(LOCAL_STORE_QUESTIONS_KEY) ?? "[]";
-  const storedQuestions = JSON.parse(localQuestions);
-
-  const questionLines = lines.filter((line) => !line.startsWith("Credit: "));
-  const isStored = storedQuestions.length === questionLines.length;
-
-  if (isStored) return storedQuestions;
-
-  const parsed = parseQuestions(lines);
-  const shuffled = shuffleQuestions(parsed);
-
+  // Fallback to copy, then download
   try {
-    localStorage.setItem(LOCAL_STORE_QUESTIONS_KEY, JSON.stringify(shuffled));
-    localStorage.setItem(LOCAL_STORE_INDEX_KEY, "0");
-  } catch (error) {
-    // do nothing
+    await copyCurrent();
+    return "copied";
+  } catch {
+    await downloadCurrent();
+    return "downloaded";
   }
+}
 
-  return shuffled;
-};
+/** Wire the share button */
+export function setupShare() {
+  const btn = document.getElementById("share-button");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    btn.setAttribute("disabled", "true");
+    try {
+      const result = await shareCurrent();
+      // (Optional) toast based on result
+      console.info("Share result:", result);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      btn.removeAttribute("disabled");
+    }
+  });
+}
 
+/** Optional: if your app already has a "Change question" button, keep behavior */
+export function setupReloadButton(handler?: () => void) {
+  const btn = document.getElementById("reload-button");
+  if (!btn) return;
+  if (handler) {
+    btn.addEventListener("click", handler);
+  }
+}

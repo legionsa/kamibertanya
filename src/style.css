@@ -1,196 +1,175 @@
-@import url("https://fonts.googleapis.com/css2?family=Rammetto+One&display=block");
-
 :root {
-  --theme-background: #2b50aa;
-  --theme-foreground: #ff9fe5;
-  --theme-highlight: #ff9fe5;
-  --theme-font: "Rammetto One";
+  /* Background */
+  --bg-image: none;               /* set by JS: url("...") */
+  --bg-opacity: 0.2;              /* image presence ~20% */
+  --duo-a: #f784c5;               /* duotone color A */
+  --duo-b: #1b602f;               /* duotone color B */
+  --accent: #000072;              /* accent */
+  --surface: #0f0f11;             /* page base */
+  --theme-foreground: #ffffff;    /* auto-picked for contrast */
+
+  /* Layout sizing */
+  --content-max: 960px;
+  --pad: 16px;
+  --radius: 12px;
+
+  /* Text */
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-html.font-resizing {
-  overflow: hidden;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--theme-background);
-  color: var(--theme-foreground);
-  display: flex;
-  flex-direction: column;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 1.2rem;
   margin: 0;
-  min-height: 100vh;
-  min-width: 320px;
+  font-family: var(--font);
+  color: var(--theme-foreground);
+  background: var(--surface);
+  /* Create the stacking context for ::before/::after layers */
+  position: relative;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
-body.themed {
-  transition: background-color 0.75s ease;
+/* Low-opacity background image (20%) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: var(--bg-opacity);
+  filter: grayscale(100%) contrast(105%);
+  pointer-events: none;
+  z-index: -2;
 }
 
-main {
-  align-items: center;
+/* Duotone gradient + accent overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+      circle at 20% 20%,
+      color-mix(in oklab, var(--duo-a) 40%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--duo-a) 45%, transparent) 0%,
+      color-mix(in oklab, var(--duo-b) 45%, transparent) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--accent) 10%, transparent),
+      transparent
+    );
+  mix-blend-mode: multiply; /* gives the duotone feel */
+  pointer-events: none;
+  z-index: -1;
+}
+
+.app {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: calc(var(--pad) * 2) var(--pad) calc(var(--pad) * 4);
+  display: grid;
+  gap: calc(var(--pad) * 2);
+}
+
+.app__title {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.app__content {
+  background: color-mix(in oklab, #000 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--theme-foreground) 15%, transparent);
+  padding: clamp(16px, 3vw, 28px);
+  border-radius: var(--radius);
+  backdrop-filter: blur(2px);
+}
+
+.display-text {
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 600;
+}
+
+/* Footer actions */
+.footer-actions {
   display: flex;
-  flex: 1;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-outline {
+  appearance: none;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  color: var(--theme-foreground);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-outline:hover {
+  opacity: 0.9;
+}
+
+.btn-outline:active {
+  transform: translateY(1px);
+}
+
+.btn-icon {
+  padding: 9px 10px;
+  width: 40px;
+  height: 40px;
   justify-content: center;
 }
 
-footer {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.75rem;
-  padding: 1rem;
+/* OPTIONAL: hide any legacy change-theme floating button if it exists */
+#change-theme-button {
+  display: none !important;
 }
 
-.footer-col-3 {
+/* Utility: keyboard hint tags */
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 12px;
+  border: 1px solid color-mix(in oklab, currentColor 25%, transparent);
+  border-bottom-width: 2px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: color-mix(in oklab, currentColor 10%, transparent);
+}
+.btn-icon {
+  padding: 9px 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
   align-items: center;
-  display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.footer-col-3 > ul {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-between;
-}
-
-h2#question-display {
-  font-display: swap;
-  font-family: var(--theme-font), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: 1.9rem;
-  margin: 0 0.25rem;
-  padding: 1rem;
-  text-align: center;
-}
-
-html.font-resizing h2#question-display {
-  position: absolute;
-  visibility: hidden;
-}
-
-button#reload-button {
-  border: 1px solid var(--theme-highlight);
-  font-family: arial;
-  font-size: 1rem;
-  margin: 0 auto 1rem auto;
-  max-width: 20rem;
-  padding: 1rem;
-}
-
-button#change-theme-button {
-  border: none;
-  margin-left: 1rem;
-  min-width: 4.4rem;
-}
-
-button {
-  appearance: none;
-  background: transparent;
-  border-radius: 2.2rem;
-  color: var(--theme-highlight);
-  cursor: pointer;
-  fill: var(--theme-highlight);
-  transition: background-color 0.1s ease;
-}
-
-button:hover {
-  background-color: var(--theme-highlight);
-  color: var(--theme-background);
-  fill: var(--theme-background);
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  color: var(--theme-highlight);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-a:visited {
-  color: var(--theme-highlight);
-}
-
-@media (min-width: 640px) {
-  h2#question-display {
-    font-size: 3rem;
-    margin: auto;
-    max-width: 80%;
-    padding: 0;
-  }
-
-  button#reload-button {
-    font-size: 1.3rem;
-    padding: 1rem 1.5rem;
-  }
-
-  footer {
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 900px) {
-  li {
-    margin-top: 1rem;
-  }
-
-  li:first-child {
-    margin-top: 0;
-  }
-
-  footer {
-    flex-direction: row;
-    align-items: flex-end;
-  }
-
-  footer > * {
-    width: 30%;
-  }
-
-  .footer-col-1 {
-    order: 1;
-  }
-
-  .footer-col-2 {
-    order: 2;
-  }
-
-  .footer-col-3 {
-    order: 3;
-    justify-content: flex-end;
-  }
-
-  .footer-col-3 > ul {
-    display: unset;
-    text-align: right;
-  }
-
-  button#reload-button {
-    margin-bottom: 0;
-  }
-}
-
-@media (min-width: 1200px) {
-  h2#question-display {
-    font-size: 4rem;
-  }
-
-  footer {
-    font-size: 1.2rem;
-    padding: 2rem;
-  }
-
-  button#reload-button {
-    font-size: 1.3rem;
-    padding: 1.2rem 2rem;
-    max-width: 24rem;
-  }
-}
+#share-button svg { width: 20px; height: 20px; }
